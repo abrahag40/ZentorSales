@@ -591,6 +591,13 @@ p.lead{ color:var(--bone-2); font-size:15.5px; line-height:1.6; }
 <style>
 /* ====== CUENTA / NUBE ====== */
 .tb-actions{ display:flex; align-items:center; gap:6px; }
+.welcome{ display:flex; flex-direction:column; gap:2px; margin:2px 2px 14px; }
+.welcome .eyebrow{ color:var(--dim); }
+.welcome b{ font-family:var(--f-display); font-size:22px; color:var(--gold-2); line-height:1.1; }
+.ceo-sum{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px; }
+.ceo-sum .st{ background:var(--ink-2); border:1px solid var(--line-soft); border-radius:var(--radius-sm); padding:12px 10px; text-align:center; }
+.ceo-sum .st b{ display:block; font-size:22px; color:var(--gold-2); }
+.ceo-sum .st small{ color:var(--dim); font-size:11px; }
 .acct-card{ display:flex; flex-direction:column; gap:12px; }
 .acct-row{ display:flex; flex-direction:column; gap:6px; }
 .acct-row.kv{ flex-direction:row; justify-content:space-between; align-items:center; }
@@ -682,6 +689,17 @@ const State = {
   saveStudied(){ Store.set('z.studied', this.studied); Cloud.queuePush(); },
   saveChecks(){ Store.set('z.checks', this.checks); Cloud.queuePush(); },
 };
+
+/* ---------- nombre de bienvenida (viene por ?nombre= en el link de invitación) ---------- */
+function captureNombre(){
+  try{
+    const u = new URLSearchParams(window.location.search);
+    const n = (u.get('nombre') || u.get('name') || '').trim();
+    if(n) Store.set('z.nombre', n.slice(0,40));
+  }catch(e){}
+}
+captureNombre();
+function getNombre(){ return Store.get('z.nombre',''); }
 
 /* ---------- iconos SVG (stroke 2, 24px) ---------- */
 const I = {
@@ -1301,8 +1319,12 @@ function viewInicio(){
     { id:'objeciones', icon:'shield', t:'Objeciones',        s:'Respuesta lista' },
   ];
 
+  const nombre = getNombre();
+  const saludo = nombre ? `<div class="welcome"><span class="eyebrow">Bienvenido</span><b>${esc(nombre)}</b></div>` : '';
+
   return `
   <div class="pad">
+    ${saludo}
     <div class="creed">
       <svg class="seal" viewBox="0 0 120 120" fill="none" stroke="var(--gold)" stroke-width="1.4" opacity=".9">
         <circle cx="60" cy="60" r="54"/><circle cx="60" cy="60" r="44" opacity=".5"/>
@@ -2021,8 +2043,11 @@ const Cloud = (() => {
       if(!sb || !this.user) return null;
       let { data } = await sb.from('profiles').select('*').eq('id', this.user.id).maybeSingle();
       if(!data){
-        const ins = await sb.from('profiles').insert({ id:this.user.id, email:this.user.email }).select().maybeSingle();
+        const ins = await sb.from('profiles').insert({ id:this.user.id, email:this.user.email, full_name: getNombre() || null }).select().maybeSingle();
         data = ins.data;
+      } else if(!data.full_name && getNombre()){
+        await sb.from('profiles').update({ full_name: getNombre() }).eq('id', this.user.id);
+        data.full_name = getNombre();
       }
       this.profile = data;
       return data;
@@ -2157,8 +2182,17 @@ function accountRender(){
     <div class="bar"><i style="width:${pct}%"></i></div></div>`;
 
   if(Cloud.isAdmin()){
-    html += `<div class="sec-title">Equipo</div>`;
+    html += `<div class="sec-title">Equipo · vista CEO</div>`;
     if(Cloud.team){
+      const vend = Cloud.team.filter(m => m.role !== 'admin');
+      const nVend = vend.length;
+      const avg = nVend ? Math.round(vend.reduce((s,m)=>s+m.pct,0)/nVend) : 0;
+      const activos = vend.filter(m => m.updated && (new Date()-new Date(m.updated)) < 7*86400000).length;
+      html += `<div class="ceo-sum">
+        <div class="st"><b>${nVend}</b><small>vendedores</small></div>
+        <div class="st"><b>${avg}%</b><small>avance promedio</small></div>
+        <div class="st"><b>${activos}</b><small>activos (7 d)</small></div>
+      </div>`;
       html += `<div class="card">` + (Cloud.team.length ? Cloud.team.map(m => `
         <div class="team-row">
           <div class="team-top">

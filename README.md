@@ -49,11 +49,27 @@ sobreescribe).
    `https://tudominio.com/` o tu URL de GitHub Pages.
    > El enlace del correo regresa a esa misma página; por eso debe estar en la lista.
 
-### 4) Publica la app
-Es un solo archivo, así que sirve cualquier hosting estático:
-- **GitHub Pages** (gratis): Settings → Pages → publica la rama. La URL será algo como
-  `https://abrahag40.github.io/zentorsales/`.
-- O Netlify / Vercel / Cloudflare Pages (arrastrar y soltar).
+### 4) Publica la app en Vercel
+1. Entra a <https://vercel.com> → **Add New → Project** → importa el repo `abrahag40/ZentorSales`.
+2. Framework Preset: **Other** (no requiere build; es estático). Deja todo por defecto y **Deploy**.
+3. En **Settings → Domains** confirma el dominio `zentor-sales.vercel.app`.
+4. Producción se sirve desde la rama **main**, así que asegúrate de fusionar los cambios
+   a `main` (o cambia la *Production Branch* en Settings → Git).
+
+> Importante para el acceso por correo: en Supabase → **Authentication → URL Configuration**
+> pon **Site URL** = `https://zentor-sales.vercel.app` y en **Redirect URLs** agrega
+> `https://zentor-sales.vercel.app/**` (el `**` permite que el enlace regrese con `?nombre=`).
+
+### Links personalizados (saludo "Bienvenido, …")
+Agrega `?nombre=` al final del dominio. El nombre se muestra en el inicio y se usa como
+nombre del vendedor en tu panel de CEO:
+
+- Alexis  → `https://zentor-sales.vercel.app/?nombre=Alexis`
+- Javier  → `https://zentor-sales.vercel.app/?nombre=Javier`
+- Gabriela→ `https://zentor-sales.vercel.app/?nombre=Gabriela`
+
+Cada quien entra con su propio correo (magic link); el nombre solo personaliza la
+experiencia y el panel.
 
 ### 5) Conviértete en administrador
 1. Abre la app publicada y entra **una vez** con tu correo (para que se cree tu perfil).
