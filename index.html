@@ -1,0 +1,2210 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0E1614">
+<meta name="description" content="La Biblia del Vendedor de Zentor — instrumento de campo de ZaharDev.">
+<title>Biblia del Vendedor · Zentor</title>
+<style>
+/* ============================================================
+   ZENTOR · LA BIBLIA DEL VENDEDOR — Instrumento de campo
+   Producto ZaharDev · Diseño first-mobile, offline, sin deps
+   ============================================================ */
+
+:root{
+  /* Base: tinta profunda con matiz teal (la "nube" de Zentor, de noche) */
+  --ink:        #0E1614;
+  --ink-2:      #14201D;
+  --surface:    #16221F;
+  --surface-2:  #1B2A26;
+  --line:       #25372F;
+  --line-soft:  #1F302B;
+
+  /* Texto: hueso/pergamino sobre tinta */
+  --bone:       #ECE7DB;
+  --bone-2:     #C2C8C0;
+  --dim:        #8C968E;
+  --faint:      #5E6A63;
+
+  /* Marca: el ORO de la biblia (valor, cierre, acento) */
+  --gold:       #E8B04B;
+  --gold-2:     #F2C66E;
+  --gold-deep:  #B9842B;
+  --gold-glow:  rgba(232,176,75,.16);
+
+  /* Sistema de VERDAD (regla de oro de marca) */
+  --jade:       #4FB286;   /* ✅ construido — lo real */
+  --jade-soft:  rgba(79,178,134,.14);
+  --steel:      #6FA0BE;   /* 🔜 en camino — la visión */
+  --steel-soft: rgba(111,160,190,.14);
+
+  /* Señales competidor (heredan el código de la biblia) */
+  --c-aspel:    #E0584E;
+  --c-contpaq:  #5B8DEF;
+  --c-bind:     #46B97A;
+  --c-alegra:   #E5C04A;
+  --c-sinube:   #E08A3C;
+  --c-odoo:     #A77BD6;
+  --c-pulpos:   #8A938C;
+
+  --danger:     #E0584E;
+
+  --radius:     16px;
+  --radius-sm:  11px;
+  --radius-lg:  22px;
+  --shadow:     0 1px 0 rgba(255,255,255,.03) inset, 0 18px 40px -24px rgba(0,0,0,.9);
+  --shadow-pop: 0 24px 60px -20px rgba(0,0,0,.85);
+
+  --f-display: -apple-system, "SF Pro Display", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-body:    -apple-system, "SF Pro Text", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-mono:    "SF Mono", "JetBrains Mono", "Cascadia Code", ui-monospace, Menlo, Consolas, monospace;
+
+  --shell-max: 480px;
+  --nav-h: 70px;
+  --top-h: 54px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ margin:0; padding:0; }
+html{ background:#070C0A; -webkit-text-size-adjust:100%; }
+body{
+  font-family:var(--f-body);
+  color:var(--bone);
+  background:var(--ink);
+  line-height:1.5;
+  font-size:16px;
+  letter-spacing:.005em;
+  overscroll-behavior-y:none;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+button{ font-family:inherit; color:inherit; cursor:pointer; border:none; background:none; }
+input{ font-family:inherit; }
+::selection{ background:var(--gold); color:var(--ink); }
+
+/* atmosphere: faint gilded vignette + grain */
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(120% 60% at 50% -10%, rgba(232,176,75,.07), transparent 60%),
+    radial-gradient(90% 50% at 50% 110%, rgba(79,178,134,.05), transparent 60%);
+}
+
+/* ===================== SHELL ===================== */
+#app{
+  position:relative; z-index:1;
+  max-width:var(--shell-max); margin:0 auto; min-height:100dvh;
+  background:var(--ink);
+  box-shadow:0 0 0 1px rgba(255,255,255,.02), 0 40px 120px -40px rgba(0,0,0,.9);
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+@media(min-width:520px){
+  #app{ min-height:calc(100dvh - 40px); margin:20px auto; border-radius:28px; border:1px solid var(--line-soft); }
+  html{ background:#05080700; background-color:#06090800; }
+  body{ background:#070C0A; }
+}
+
+.topbar{
+  position:sticky; top:0; z-index:40;
+  height:calc(var(--top-h) + var(--safe-t)); padding-top:var(--safe-t);
+  display:flex; align-items:center; justify-content:space-between;
+  padding-left:18px; padding-right:14px;
+  background:linear-gradient(180deg, rgba(14,22,20,.97), rgba(14,22,20,.82));
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line-soft);
+}
+.brandmark{ display:flex; align-items:center; gap:9px; min-width:0; }
+.brandmark .z{
+  width:26px;height:26px;border-radius:8px;flex:0 0 auto;
+  display:grid;place-items:center;
+  background:linear-gradient(150deg,var(--gold-2),var(--gold-deep));
+  color:#1a1206; font-family:var(--f-display); font-weight:900; font-size:16px;
+  box-shadow:0 4px 12px -4px rgba(232,176,75,.5), 0 0 0 1px rgba(255,255,255,.12) inset;
+}
+.brandmark .wm{ min-width:0; }
+.brandmark .wm b{
+  display:block; font-family:var(--f-display); font-weight:800; font-size:13.5px;
+  letter-spacing:.14em; text-transform:uppercase; line-height:1; color:var(--bone);
+}
+.brandmark .wm small{
+  display:block; font-family:var(--f-mono); font-size:9.5px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--gold); margin-top:3px;
+}
+.topbar .tb-action{
+  width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  color:var(--bone-2); border:1px solid var(--line-soft);
+}
+.topbar .tb-action:active{ background:var(--surface); }
+
+/* main scroll area */
+main{
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:calc(var(--nav-h) + var(--safe-b) + 18px);
+  scroll-behavior:smooth;
+}
+.view{ animation:viewin .34s cubic-bezier(.2,.7,.2,1); }
+@keyframes viewin{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
+.pad{ padding:18px; }
+.pad-x{ padding-left:18px; padding-right:18px; }
+
+/* ===================== BOTTOM NAV ===================== */
+.tabbar{
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:var(--shell-max); z-index:50;
+  height:calc(var(--nav-h) + var(--safe-b)); padding-bottom:var(--safe-b);
+  display:grid; grid-template-columns:repeat(4,1fr);
+  background:linear-gradient(180deg, rgba(16,24,22,.82), rgba(11,17,15,.98));
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--line-soft);
+}
+.tabbar .tab{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  color:var(--faint); font-size:10.5px; font-weight:600; letter-spacing:.03em;
+  position:relative; transition:color .2s;
+}
+.tabbar .tab svg{ width:23px;height:23px; transition:transform .2s; }
+.tabbar .tab.on{ color:var(--gold); }
+.tabbar .tab.on svg{ transform:translateY(-1px); }
+.tabbar .tab.on::before{
+  content:""; position:absolute; top:8px; width:30px; height:30px; border-radius:50%;
+  background:var(--gold-glow); filter:blur(2px); z-index:-1;
+}
+.tabbar .tab:active{ color:var(--gold-2); }
+
+/* ===================== TYPE ===================== */
+.eyebrow{
+  font-family:var(--f-mono); font-size:10.5px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--gold); font-weight:600;
+}
+.eyebrow.muted{ color:var(--dim); }
+h1.disp{
+  font-family:var(--f-display); font-weight:900; letter-spacing:-.02em; line-height:1.02;
+  font-size:clamp(30px,8.5vw,40px); margin:8px 0 0; text-wrap:balance;
+}
+h2.sec{
+  font-family:var(--f-display); font-weight:800; letter-spacing:-.01em; line-height:1.08;
+  font-size:22px; margin:0 0 2px;
+}
+h3.card-t{ font-family:var(--f-display); font-weight:800; font-size:17px; letter-spacing:-.01em; margin:0; }
+p.lead{ color:var(--bone-2); font-size:15.5px; line-height:1.6; }
+.kicker-n{ font-family:var(--f-mono); color:var(--gold); font-weight:600; }
+
+/* ===================== TAGS / STATUS ===================== */
+.tag{
+  display:inline-flex; align-items:center; gap:5px; font-family:var(--f-mono);
+  font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+  padding:4px 9px; border-radius:999px; border:1px solid transparent; white-space:nowrap;
+}
+.tag .dot{ width:6px;height:6px;border-radius:50%; }
+.tag.built{ color:var(--jade); background:var(--jade-soft); border-color:rgba(79,178,134,.3); }
+.tag.built .dot{ background:var(--jade); box-shadow:0 0 8px var(--jade); }
+.tag.road{ color:var(--steel); background:var(--steel-soft); border-color:rgba(111,160,190,.3); }
+.tag.road .dot{ background:var(--steel); box-shadow:0 0 8px var(--steel); }
+.tag.gold{ color:var(--gold); background:var(--gold-glow); border-color:rgba(232,176,75,.32); }
+
+/* ===================== CARD ===================== */
+.card{
+  background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+.card.pad{ padding:16px; }
+.card-btn{ width:100%; text-align:left; }
+.card-btn:active{ transform:scale(.985); transition:transform .1s; }
+
+/* a "scripture" content card */
+.scripture p{ color:var(--bone-2); font-size:15.5px; line-height:1.62; margin:0 0 13px; }
+.scripture p:last-child{ margin-bottom:0; }
+.scripture strong, .scripture b{ color:var(--bone); font-weight:700; }
+.scripture em{ color:var(--gold-2); font-style:normal; font-weight:500; }
+.scripture ul, .scripture ol{ margin:0 0 14px; padding-left:0; list-style:none; }
+.scripture li{
+  position:relative; padding-left:20px; margin-bottom:9px; color:var(--bone-2);
+  font-size:15px; line-height:1.55;
+}
+.scripture li::before{
+  content:""; position:absolute; left:3px; top:9px; width:6px;height:6px;border-radius:2px;
+  background:var(--gold); transform:rotate(45deg); opacity:.9;
+}
+.scripture ol{ counter-reset:s; }
+.scripture ol > li{ counter-increment:s; padding-left:30px; }
+.scripture ol > li::before{
+  content:counter(s); top:0; left:0; width:20px;height:20px;border-radius:6px; transform:none;
+  background:var(--ink-2); border:1px solid var(--line); color:var(--gold);
+  font-family:var(--f-mono); font-size:11px; font-weight:600;
+  display:grid; place-items:center;
+}
+
+/* quote / regla de oro */
+.quote{
+  border-left:2px solid var(--gold); padding:12px 14px; margin:14px 0;
+  background:linear-gradient(90deg, var(--gold-glow), transparent 80%);
+  border-radius:0 12px 12px 0; color:var(--bone); font-size:14.5px; line-height:1.55;
+}
+.quote .ql{ font-family:var(--f-mono); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:6px; }
+
+/* mini data table */
+.dtable{ width:100%; border-collapse:collapse; font-size:13.5px; margin:6px 0 4px; }
+.dtable th, .dtable td{ text-align:left; padding:9px 10px; vertical-align:top; border-bottom:1px solid var(--line-soft); }
+.dtable th{ font-family:var(--f-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); font-weight:600; }
+.dtable td:first-child{ color:var(--bone); font-weight:600; width:42%; }
+.dtable td{ color:var(--bone-2); }
+.dtable tr:last-child td{ border-bottom:none; }
+
+/* ===================== HOME ===================== */
+.creed{
+  position:relative; overflow:hidden; border-radius:var(--radius-lg);
+  border:1px solid rgba(232,176,75,.22);
+  background:
+    radial-gradient(120% 90% at 80% 0%, rgba(232,176,75,.1), transparent 55%),
+    linear-gradient(165deg, var(--surface-2), var(--ink-2));
+  padding:22px 20px 20px;
+}
+.creed .seal{ position:absolute; right:-26px; top:-22px; width:140px;height:140px; opacity:.9; }
+.creed h1.disp{ position:relative; }
+.creed .gold-rule{ height:2px; width:46px; background:linear-gradient(90deg,var(--gold),transparent); margin:14px 0 12px; border-radius:2px; }
+
+.qgrid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.qtile{
+  position:relative; padding:15px 14px; border-radius:var(--radius); min-height:104px;
+  background:var(--surface); border:1px solid var(--line-soft);
+  display:flex; flex-direction:column; justify-content:space-between; overflow:hidden;
+}
+.qtile:active{ transform:scale(.97); transition:.1s; }
+.qtile .ico{ width:34px;height:34px;border-radius:10px; display:grid;place-items:center; margin-bottom:auto;
+  background:var(--ink-2); border:1px solid var(--line); color:var(--gold); }
+.qtile . qt-t{ }
+.qtile b{ display:block; font-family:var(--f-display); font-weight:800; font-size:15px; margin-top:12px; }
+.qtile small{ display:block; color:var(--dim); font-size:11.5px; margin-top:2px; line-height:1.3; }
+.qtile.accent{ background:linear-gradient(160deg, rgba(232,176,75,.16), var(--surface)); border-color:rgba(232,176,75,.28); }
+.qtile.accent .ico{ background:linear-gradient(150deg,var(--gold-2),var(--gold-deep)); color:#1a1206; border:none; }
+
+/* progress ring */
+.progress-card{ display:flex; align-items:center; gap:16px; }
+.ring{ position:relative; width:74px;height:74px; flex:0 0 auto; }
+.ring svg{ transform:rotate(-90deg); }
+.ring .pct{ position:absolute; inset:0; display:grid; place-items:center; font-family:var(--f-mono); font-weight:700; font-size:17px; color:var(--gold); }
+.progress-card .pc-meta b{ font-family:var(--f-display); font-size:15px; font-weight:800; display:block; }
+.progress-card .pc-meta small{ color:var(--dim); font-size:12.5px; }
+
+/* section heading row */
+.sechead{ display:flex; align-items:baseline; justify-content:space-between; margin:26px 2px 12px; }
+.sechead .eyebrow{ }
+.sechead .link{ color:var(--gold); font-size:12.5px; font-weight:600; font-family:var(--f-mono); letter-spacing:.04em; }
+
+/* ===================== LIST ROWS ===================== */
+.rowlist{ display:flex; flex-direction:column; gap:10px; }
+.row{
+  display:flex; align-items:center; gap:13px; padding:14px; border-radius:var(--radius);
+  background:var(--surface); border:1px solid var(--line-soft); width:100%; text-align:left;
+}
+.row:active{ transform:scale(.985); transition:.1s; }
+.row .rl{ flex:0 0 auto; width:40px;height:40px;border-radius:11px; display:grid;place-items:center;
+  font-size:20px; background:var(--ink-2); border:1px solid var(--line); }
+.row .rc{ min-width:0; flex:1; }
+.row .rc b{ display:block; font-family:var(--f-display); font-weight:700; font-size:15.5px; line-height:1.2; }
+.row .rc small{ display:block; color:var(--dim); font-size:12.5px; margin-top:3px; line-height:1.35; }
+.row .ra{ flex:0 0 auto; color:var(--faint); }
+.row .chev{ width:18px;height:18px; }
+
+/* part index marker */
+.partmark{
+  flex:0 0 auto; width:44px;height:44px;border-radius:12px; display:grid;place-items:center;
+  font-family:var(--f-display); font-weight:900; font-size:18px; color:var(--gold);
+  background:var(--ink-2); border:1px solid var(--line);
+}
+
+/* ===================== CHIPS (industria selector) ===================== */
+.chiprow{ display:flex; gap:8px; overflow-x:auto; padding:2px 18px 4px; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+.chiprow::-webkit-scrollbar{ display:none; }
+.chip{
+  flex:0 0 auto; display:inline-flex; align-items:center; gap:7px;
+  padding:9px 14px; border-radius:999px; font-size:13.5px; font-weight:600; white-space:nowrap;
+  background:var(--surface); border:1px solid var(--line-soft); color:var(--bone-2);
+}
+.chip .e{ font-size:15px; }
+.chip.on{ background:var(--gold); color:var(--ink); border-color:var(--gold); }
+.chip.on .star{ color:var(--ink); }
+.chip .star{ color:var(--gold); font-size:11px; }
+
+/* ===================== FICHA DETAIL ===================== */
+.ficha-hero{
+  border-radius:var(--radius-lg); padding:20px; position:relative; overflow:hidden;
+  background:linear-gradient(160deg, var(--surface-2), var(--ink-2)); border:1px solid var(--line);
+}
+.ficha-hero .big-e{ font-size:40px; line-height:1; }
+.block{ margin-top:14px; }
+.block-h{ font-family:var(--f-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; display:flex; align-items:center; gap:7px; }
+.block-h .ln{ flex:1; height:1px; background:var(--line); }
+.vocab{ display:flex; flex-wrap:wrap; gap:7px; }
+.vocab span{ font-family:var(--f-mono); font-size:12px; padding:5px 10px; border-radius:8px; background:var(--ink-2); border:1px solid var(--line); color:var(--bone-2); }
+.aja{ padding:14px; border-radius:var(--radius); background:linear-gradient(150deg, var(--gold-glow), var(--surface)); border:1px solid rgba(232,176,75,.25); }
+.aja .lbl{ display:flex; align-items:center; gap:6px; font-family:var(--f-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:7px; }
+.aja p{ margin:0; color:var(--bone); font-size:14.5px; line-height:1.5; }
+.obj-pair{ padding:14px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--line-soft); }
+.obj-pair .o{ color:var(--bone); font-size:14px; font-style:italic; }
+.obj-pair .arrow{ color:var(--jade); font-family:var(--f-mono); margin:8px 0 6px; font-size:11px; letter-spacing:.1em; }
+.obj-pair .a{ color:var(--bone-2); font-size:14px; line-height:1.5; }
+.pitch1{ padding:16px; border-radius:var(--radius); background:linear-gradient(160deg,var(--ink-2),var(--surface)); border:1px solid var(--line); position:relative; }
+.pitch1::before{ content:"“"; position:absolute; top:2px; left:10px; font-family:var(--f-display); font-size:54px; color:var(--gold); opacity:.22; line-height:1; }
+.pitch1 p{ margin:0; color:var(--bone); font-size:15px; line-height:1.55; position:relative; }
+.roi-line{ display:flex; align-items:flex-start; gap:10px; padding:13px 14px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--line-soft); }
+.roi-line .ri{ color:var(--jade); flex:0 0 auto; margin-top:1px; }
+.roi-line p{ margin:0; font-size:14px; color:var(--bone-2); line-height:1.5; }
+
+/* ===================== BATTLECARD ===================== */
+.bc-list{ display:flex; flex-direction:column; gap:10px; }
+.bc-row{ display:flex; align-items:center; gap:13px; padding:14px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--line-soft); width:100%; text-align:left; }
+.bc-row:active{ transform:scale(.985); transition:.1s; }
+.bc-chip{ flex:0 0 auto; width:14px;height:14px;border-radius:5px; box-shadow:0 0 0 3px rgba(255,255,255,.04); }
+.bc-row .bc-c{ flex:1; min-width:0; }
+.bc-row .bc-c b{ font-family:var(--f-display); font-weight:700; font-size:15.5px; display:block; }
+.bc-row .bc-c small{ color:var(--dim); font-size:12.5px; }
+.bc-hero{ padding:18px 18px 16px; border-radius:var(--radius-lg); border:1px solid var(--line); position:relative; overflow:hidden; }
+.bc-hero .stripe{ position:absolute; left:0; top:0; bottom:0; width:5px; }
+.wedge{ padding:14px; border-radius:var(--radius); background:var(--jade-soft); border:1px solid rgba(79,178,134,.28); }
+.wedge .lbl{ font-family:var(--f-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--jade); margin-bottom:7px; }
+.gap-li{ display:flex; gap:9px; align-items:flex-start; margin-bottom:8px; font-size:14px; color:var(--bone-2); line-height:1.45; }
+.gap-li .x{ color:var(--danger); flex:0 0 auto; margin-top:2px; }
+.str-li{ display:flex; gap:9px; align-items:flex-start; margin-bottom:8px; font-size:14px; color:var(--bone-2); line-height:1.45; }
+.str-li .c{ color:var(--steel); flex:0 0 auto; margin-top:2px; }
+.frase-box{ padding:15px; border-radius:var(--radius); background:linear-gradient(160deg,var(--ink-2),var(--surface)); border:1px dashed rgba(232,176,75,.4); }
+.frase-box .lbl{ font-family:var(--f-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:7px; }
+.frase-box p{ margin:0; color:var(--bone); font-size:15px; line-height:1.55; font-style:italic; }
+
+/* método pasos */
+.metodo-step{ display:flex; gap:13px; padding:14px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--line-soft); }
+.metodo-step .n{ flex:0 0 auto; width:28px;height:28px;border-radius:9px; display:grid;place-items:center; font-family:var(--f-mono); font-weight:700; font-size:13px; color:var(--ink); background:var(--gold); }
+.metodo-step .mc b{ display:block; font-size:14.5px; color:var(--bone); font-weight:700; margin-bottom:3px; }
+.metodo-step .mc p{ margin:0; font-size:13.5px; color:var(--bone-2); line-height:1.5; }
+
+/* ===================== OBJECIONES ===================== */
+.obj-acc{ background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius); overflow:hidden; }
+.obj-acc + .obj-acc{ margin-top:10px; }
+.obj-q{ width:100%; text-align:left; padding:15px; display:flex; align-items:center; gap:12px; }
+.obj-q .qi{ flex:0 0 auto; width:30px;height:30px;border-radius:9px; display:grid;place-items:center; background:var(--ink-2); border:1px solid var(--line); color:var(--gold); }
+.obj-q .qt{ flex:1; }
+.obj-q .qt b{ display:block; font-size:14.5px; color:var(--bone); font-style:italic; }
+.obj-q .qt small{ display:block; color:var(--dim); font-size:11.5px; margin-top:2px; }
+.obj-q .caret{ transition:transform .25s; color:var(--faint); flex:0 0 auto; }
+.obj-acc.open .obj-q .caret{ transform:rotate(180deg); color:var(--gold); }
+.obj-a{ max-height:0; overflow:hidden; transition:max-height .3s ease; }
+.obj-a-in{ padding:0 15px 16px 57px; color:var(--bone-2); font-size:14px; line-height:1.55; }
+.ssf{ display:flex; gap:6px; margin-bottom:12px; }
+.ssf span{ font-family:var(--f-mono); font-size:10px; letter-spacing:.05em; padding:4px 8px; border-radius:7px; background:var(--jade-soft); color:var(--jade); border:1px solid rgba(79,178,134,.25); }
+
+/* ===================== ROI CALC ===================== */
+.calc-field{ margin-bottom:16px; }
+.calc-field label{ display:flex; justify-content:space-between; align-items:baseline; font-size:13.5px; color:var(--bone-2); margin-bottom:8px; font-weight:500; }
+.calc-field label .v{ font-family:var(--f-mono); color:var(--gold); font-weight:700; font-size:14px; }
+.calc-field input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:5px; border-radius:5px; background:var(--line); outline:none; }
+.calc-field input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:24px;height:24px;border-radius:50%; background:linear-gradient(150deg,var(--gold-2),var(--gold-deep)); cursor:pointer; box-shadow:0 3px 10px -2px rgba(232,176,75,.6), 0 0 0 1px rgba(255,255,255,.15) inset; }
+.calc-field input[type=range]::-moz-range-thumb{ width:24px;height:24px;border:none;border-radius:50%; background:var(--gold); cursor:pointer; }
+.calc-field .hint{ font-size:11.5px; color:var(--faint); margin-top:6px; }
+.calc-num{ display:flex; align-items:center; gap:10px; }
+.calc-num .cn-pre{ font-family:var(--f-mono); color:var(--dim); }
+.calc-num input[type=number]{ flex:1; background:var(--ink-2); border:1px solid var(--line); border-radius:11px; padding:11px 13px; color:var(--bone); font-size:15px; font-family:var(--f-mono); }
+.calc-num input:focus{ outline:none; border-color:var(--gold); }
+.roi-result{
+  border-radius:var(--radius-lg); padding:20px; text-align:center;
+  background:linear-gradient(165deg, rgba(79,178,134,.16), var(--ink-2)); border:1px solid rgba(79,178,134,.3);
+}
+.roi-result .rlabel{ font-family:var(--f-mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--jade); }
+.roi-result .rbig{ font-family:var(--f-display); font-weight:900; font-size:clamp(34px,11vw,46px); color:var(--jade); letter-spacing:-.02em; margin:6px 0 2px; line-height:1; }
+.roi-result .rsub{ color:var(--bone-2); font-size:13.5px; }
+.roi-break{ margin-top:14px; display:flex; flex-direction:column; gap:8px; text-align:left; }
+.roi-break .rb{ display:flex; justify-content:space-between; font-size:13px; padding:8px 0; border-bottom:1px solid var(--line-soft); }
+.roi-break .rb span{ color:var(--bone-2); }
+.roi-break .rb b{ font-family:var(--f-mono); color:var(--bone); }
+.roi-verdict{ margin-top:14px; padding:13px; border-radius:var(--radius); background:var(--ink); border:1px dashed rgba(232,176,75,.4); color:var(--bone); font-size:14px; line-height:1.5; }
+.roi-verdict b{ color:var(--gold); }
+
+/* ===================== GLOSARIO ===================== */
+.gl-item{ padding:13px 14px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--line-soft); }
+.gl-item + .gl-item{ margin-top:8px; }
+.gl-item .gt{ font-family:var(--f-mono); font-size:14px; color:var(--gold); font-weight:700; }
+.gl-item .ga{ color:var(--bone-2); font-size:14px; margin-top:4px; line-height:1.45; }
+.gl-item .ga::before{ content:"→ "; color:var(--jade); }
+.nodecir{ padding:15px; border-radius:var(--radius); background:rgba(224,88,78,.08); border:1px solid rgba(224,88,78,.28); }
+.nodecir .lbl{ display:flex; align-items:center; gap:7px; color:var(--danger); font-family:var(--f-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; margin-bottom:9px; }
+.nodecir .words{ display:flex; flex-wrap:wrap; gap:7px; }
+.nodecir .words span{ font-family:var(--f-mono); font-size:12px; padding:4px 9px; border-radius:7px; background:rgba(224,88,78,.12); color:#f0a59e; text-decoration:line-through; }
+
+/* ===================== PITCHES (flashcards) ===================== */
+.pitch-seg{ display:flex; gap:6px; padding:5px; background:var(--ink-2); border:1px solid var(--line-soft); border-radius:13px; margin-bottom:16px; }
+.pitch-seg button{ flex:1; padding:9px 4px; border-radius:9px; font-size:12.5px; font-weight:600; color:var(--dim); font-family:var(--f-mono); letter-spacing:.04em; }
+.pitch-seg button.on{ background:var(--gold); color:var(--ink); }
+.pitch-card{ border-radius:var(--radius-lg); padding:22px; min-height:200px; background:linear-gradient(160deg,var(--surface-2),var(--ink-2)); border:1px solid var(--line); position:relative; display:flex; flex-direction:column; }
+.pitch-card .ctx{ font-family:var(--f-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+.pitch-card .ptxt{ font-size:17px; line-height:1.55; color:var(--bone); flex:1; }
+.pitch-card .ptxt em{ color:var(--gold-2); font-style:normal; }
+
+/* ===================== GUION (timeline + timers) ===================== */
+.gstep{ display:flex; gap:14px; position:relative; }
+.gstep:not(:last-child){ padding-bottom:14px; }
+.gstep .gline{ position:absolute; left:18px; top:38px; bottom:0; width:2px; background:var(--line); }
+.gstep .gn{ flex:0 0 auto; width:38px;height:38px;border-radius:12px; display:grid;place-items:center; z-index:1;
+  font-family:var(--f-mono); font-weight:700; font-size:14px; color:var(--gold); background:var(--ink-2); border:1px solid var(--line); }
+.gstep .gc{ flex:1; background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius); padding:14px; margin-bottom:0; }
+.gstep .gc .gtop{ display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.gstep .gc b{ font-family:var(--f-display); font-weight:700; font-size:15px; }
+.gstep .gc .gtime{ font-family:var(--f-mono); font-size:11px; color:var(--gold); background:var(--gold-glow); padding:3px 8px; border-radius:7px; white-space:nowrap; }
+.gstep .gc p{ margin:8px 0 0; font-size:13.5px; color:var(--bone-2); line-height:1.5; }
+
+/* ===================== CHECKLIST ===================== */
+.check-item{ display:flex; align-items:center; gap:13px; padding:15px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--line-soft); width:100%; text-align:left; }
+.check-item .cbx{ flex:0 0 auto; width:26px;height:26px;border-radius:8px; border:2px solid var(--line); display:grid;place-items:center; transition:.2s; }
+.check-item .cbx svg{ width:16px;height:16px; opacity:0; transform:scale(.5); transition:.2s; color:var(--ink); }
+.check-item.done .cbx{ background:var(--jade); border-color:var(--jade); }
+.check-item.done .cbx svg{ opacity:1; transform:scale(1); }
+.check-item .ctxt{ flex:1; font-size:14.5px; color:var(--bone); line-height:1.4; transition:.2s; }
+.check-item.done .ctxt{ color:var(--dim); text-decoration:line-through; }
+
+/* ===================== SEARCH ===================== */
+.searchbar{ position:sticky; top:0; z-index:10; padding:14px 18px; background:linear-gradient(180deg,var(--ink),rgba(14,22,20,.6)); }
+.searchbox{ display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:14px; background:var(--surface); border:1px solid var(--line); }
+.searchbox.foc{ border-color:var(--gold); }
+.searchbox svg{ color:var(--dim); flex:0 0 auto; }
+.searchbox input{ flex:1; background:none; border:none; color:var(--bone); font-size:16px; outline:none; }
+.searchbox input::placeholder{ color:var(--faint); }
+.searchbox .clr{ color:var(--faint); padding:4px; }
+.search-cat{ font-family:var(--f-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:18px 2px 9px; display:flex; align-items:center; gap:8px; }
+.search-cat .ln{ flex:1; height:1px; background:var(--line-soft); }
+.hl{ background:var(--gold-glow); color:var(--gold-2); border-radius:3px; padding:0 1px; }
+.empty{ text-align:center; padding:50px 24px; color:var(--dim); }
+.empty svg{ color:var(--faint); margin-bottom:14px; }
+.empty b{ display:block; color:var(--bone-2); font-size:15px; margin-bottom:4px; }
+
+/* ===================== DETAIL HEADER (back) ===================== */
+.dhead{ display:flex; align-items:center; gap:12px; padding:14px 18px 6px; }
+.backbtn{ width:38px;height:38px;border-radius:11px; display:grid;place-items:center; background:var(--surface); border:1px solid var(--line-soft); color:var(--bone-2); flex:0 0 auto; }
+.backbtn:active{ background:var(--surface-2); }
+.dhead .dh-t{ min-width:0; }
+.dhead .dh-t .eyebrow{ font-size:9.5px; }
+.dhead .dh-t b{ display:block; font-family:var(--f-display); font-weight:800; font-size:18px; line-height:1.1; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* chapter read */
+.ch-read .ch-status{ display:flex; gap:8px; margin:12px 0 18px; flex-wrap:wrap; }
+.studybtn{ width:100%; margin-top:22px; padding:15px; border-radius:var(--radius); display:flex; align-items:center; justify-content:center; gap:10px;
+  font-family:var(--f-display); font-weight:700; font-size:15px; border:1px solid var(--line); background:var(--surface); color:var(--bone); }
+.studybtn.done{ background:var(--jade-soft); border-color:rgba(79,178,134,.4); color:var(--jade); }
+.studybtn svg{ width:20px;height:20px; }
+
+/* chapter nav within part */
+.chnav{ display:flex; gap:10px; margin-top:24px; }
+.chnav button{ flex:1; padding:13px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--line-soft); display:flex; flex-direction:column; gap:3px; text-align:left; }
+.chnav button:disabled{ opacity:.3; }
+.chnav button small{ font-family:var(--f-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); }
+.chnav button b{ font-size:13px; color:var(--bone); font-weight:600; }
+.chnav button.next{ text-align:right; }
+
+/* misc */
+.divider{ height:1px; background:var(--line-soft); margin:22px 0; }
+.note-strip{ display:flex; gap:10px; padding:12px 14px; border-radius:var(--radius); background:rgba(111,160,190,.08); border:1px solid rgba(111,160,190,.25); font-size:13px; color:var(--bone-2); line-height:1.5; }
+.note-strip .ns-i{ color:var(--steel); flex:0 0 auto; margin-top:1px; }
+.note-strip.warn{ background:rgba(232,176,75,.07); border-color:rgba(232,176,75,.28); }
+.note-strip.warn .ns-i{ color:var(--gold); }
+.stat-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.stat-3 .st{ padding:14px 10px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--line-soft); text-align:center; }
+.stat-3 .st b{ display:block; font-family:var(--f-display); font-weight:900; font-size:24px; color:var(--gold); line-height:1; }
+.stat-3 .st small{ display:block; color:var(--dim); font-size:11px; margin-top:6px; line-height:1.3; }
+
+/* ===================== SPLASH ===================== */
+#splash{ position:fixed; inset:0; z-index:200; background:var(--ink); display:grid; place-items:center; transition:opacity .5s ease, visibility .5s; }
+#splash.gone{ opacity:0; visibility:hidden; pointer-events:none; }
+.splash-in{ text-align:center; }
+.splash-seal{ width:120px;height:120px; margin:0 auto 22px; }
+.splash-seal circle, .splash-seal path, .splash-seal line{ stroke-dasharray:1; stroke-dashoffset:1; }
+.splash-in .sname{ font-family:var(--f-display); font-weight:900; font-size:24px; letter-spacing:.02em; opacity:0; animation:fadeup .6s ease .55s forwards; }
+.splash-in .ssub{ font-family:var(--f-mono); font-size:10.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); margin-top:8px; opacity:0; animation:fadeup .6s ease .7s forwards; }
+.splash-in .sbrand{ font-family:var(--f-mono); font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--faint); margin-top:28px; opacity:0; animation:fadeup .6s ease .9s forwards; }
+@keyframes fadeup{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:none;} }
+@keyframes draw{ to{ stroke-dashoffset:0; } }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+  .view{ animation:none; }
+}
+:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; border-radius:6px; }
+</style>
+</head>
+<body>
+<div id="splash">
+  <div class="splash-in">
+    <svg class="splash-seal" viewBox="0 0 120 120" fill="none" stroke="#E8B04B" stroke-width="2">
+      <circle cx="60" cy="60" r="54" pathLength="1" style="animation:draw 1s ease forwards"/>
+      <circle cx="60" cy="60" r="44" pathLength="1" stroke-width="1" opacity=".5" style="animation:draw 1s ease .15s forwards"/>
+      <path d="M60 30 L60 90 M40 42 Q60 32 80 42 M40 78 Q60 88 80 78" pathLength="1" stroke-width="2.4" style="animation:draw 1.1s ease .25s forwards"/>
+      <path d="M40 42 L40 78 M80 42 L80 78" pathLength="1" style="animation:draw 1s ease .35s forwards"/>
+    </svg>
+    <div class="sname">La Biblia del Vendedor</div>
+    <div class="ssub">Zentor · Instrumento de campo</div>
+    <div class="sbrand">Un producto ZaharDev</div>
+  </div>
+</div>
+
+<div id="app">
+  <header class="topbar">
+    <div class="brandmark">
+      <div class="z">Z</div>
+      <div class="wm">
+        <b>Biblia</b>
+        <small id="topctx">del vendedor</small>
+      </div>
+    </div>
+    <div class="tb-actions">
+      <button class="tb-action" data-act="goto-search" aria-label="Buscar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <button class="tb-action" data-act="goto-account" aria-label="Mi cuenta">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main"><!-- views render here --></main>
+
+  <nav class="tabbar" id="tabbar"><!-- tabs render here --></nav>
+</div>
+
+<!-- ====== PANTALLA DE ACCESO (magic link) ====== -->
+<div id="auth" class="auth" style="display:none">
+  <div class="auth-card">
+    <svg class="auth-mark" viewBox="0 0 120 120" fill="none" stroke="var(--gold)" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M60 30 L60 90 M40 42 Q60 32 80 42 M40 78 Q60 88 80 78" stroke-width="2.4"/>
+      <path d="M40 42 L40 78 M80 42 L80 78"/>
+    </svg>
+    <div class="auth-title">La Biblia del Vendedor</div>
+    <div class="auth-sub">Entra con tu correo para guardar tus avances</div>
+    <input id="auth-email" class="auth-input" type="email" inputmode="email" autocomplete="email"
+           placeholder="tu-correo@ejemplo.com" aria-label="Correo">
+    <button id="auth-send" class="auth-btn" data-act="auth-send">Enviarme un enlace de acceso</button>
+    <div id="auth-msg" class="auth-msg"></div>
+    <div class="auth-foot">Te llega un enlace por correo. Sin contraseñas.</div>
+  </div>
+</div>
+
+<style>
+/* ====== CUENTA / NUBE ====== */
+.tb-actions{ display:flex; align-items:center; gap:6px; }
+.acct-card{ display:flex; flex-direction:column; gap:12px; }
+.acct-row{ display:flex; flex-direction:column; gap:6px; }
+.acct-row.kv{ flex-direction:row; justify-content:space-between; align-items:center; }
+.acct-row .k{ color:var(--dim); font-size:13px; }
+.acct-row .v{ color:var(--bone); font-size:14px; }
+.acct-input{ width:100%; background:var(--ink-2); border:1px solid var(--line); color:var(--bone);
+  border-radius:var(--radius-sm); padding:12px 14px; font-size:15px; outline:none; }
+.acct-input:focus{ border-color:var(--gold-deep); }
+.btn{ background:var(--gold); color:var(--ink); font-weight:700; border-radius:var(--radius-sm);
+  padding:12px 16px; font-size:15px; width:100%; }
+.btn.ghost{ background:transparent; border:1px solid var(--line); color:var(--bone-2); margin-top:14px; }
+.btn:disabled{ opacity:.55; }
+.prog-big{ display:flex; align-items:baseline; gap:8px; margin-bottom:10px; }
+.prog-big b{ font-size:26px; color:var(--gold-2); }
+.prog-big span{ color:var(--dim); font-size:13px; }
+.bar{ height:8px; border-radius:99px; background:var(--ink-2); overflow:hidden; }
+.bar i{ display:block; height:100%; background:linear-gradient(90deg,var(--gold-deep),var(--gold-2)); border-radius:99px; }
+.bar.sm{ height:6px; margin-top:8px; }
+.sec-title{ font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim);
+  margin:22px 2px 10px; font-weight:700; }
+.team-row{ padding:12px 0; border-bottom:1px solid var(--line-soft); }
+.team-row:last-child{ border-bottom:none; }
+.team-top{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+.tm-id b{ font-size:15px; color:var(--bone); display:block; }
+.tm-id small{ font-size:12px; color:var(--faint); }
+.tm-pct{ text-align:right; white-space:nowrap; }
+.tm-pct b{ font-size:16px; color:var(--gold-2); }
+.tm-pct small{ font-size:11px; color:var(--dim); display:block; }
+.muted{ color:var(--dim); font-size:14px; padding:6px 0; }
+.note{ color:var(--bone-2); font-size:14px; line-height:1.55; }
+.note b{ color:var(--gold-2); }
+/* overlay de acceso */
+.auth{ position:fixed; inset:0; z-index:9999; background:var(--ink);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  padding-top:calc(24px + var(--safe-t)); padding-bottom:calc(24px + var(--safe-b)); }
+.auth-card{ width:100%; max-width:360px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; }
+.auth-mark{ width:84px; height:84px; }
+.auth-title{ font-family:var(--f-display); font-size:24px; font-weight:800; color:var(--bone); }
+.auth-sub{ color:var(--dim); font-size:14px; margin-bottom:8px; }
+.auth-input{ width:100%; background:var(--surface); border:1px solid var(--line); color:var(--bone);
+  border-radius:var(--radius-sm); padding:14px 16px; font-size:16px; outline:none; text-align:center; }
+.auth-input:focus{ border-color:var(--gold-deep); }
+.auth-btn{ width:100%; background:var(--gold); color:var(--ink); font-weight:700;
+  border-radius:var(--radius-sm); padding:14px 16px; font-size:15px; }
+.auth-btn:disabled{ opacity:.55; }
+.auth-msg{ font-size:13px; min-height:18px; color:var(--dim); }
+.auth-msg.ok{ color:var(--jade); }
+.auth-msg.err{ color:var(--danger); }
+.auth-foot{ color:var(--faint); font-size:12px; margin-top:4px; }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ===========================================================================
+   ZENTOR · LA BIBLIA DEL VENDEDOR — app de campo (vanilla, offline, sin deps)
+   Producto ZaharDev
+   =========================================================================== */
+'use strict';
+
+/* ===========================================================================
+   CONFIGURACIÓN DE LA NUBE (Supabase)
+   1) Crea un proyecto gratis en https://supabase.com
+   2) Settings → API: copia "Project URL" y la llave "anon public"
+   3) Pégalas aquí abajo. Mientras digan TU-..., la app funciona SOLO local.
+   =========================================================================== */
+const ZENTOR_CONFIG = {
+  SUPABASE_URL:      'https://TU-PROYECTO.supabase.co',
+  SUPABASE_ANON_KEY: 'TU-ANON-KEY'
+};
+
+/* ---------- almacenamiento defensivo (persiste si se hospeda; nunca truena) ---------- */
+const Store = (() => {
+  let mem = {};
+  let ok = false;
+  try { const k='__z'; window.localStorage.setItem(k,'1'); window.localStorage.removeItem(k); ok = true; } catch(e){ ok = false; }
+  return {
+    get(k, d){ try { if(ok){ const v=window.localStorage.getItem(k); return v==null?d:JSON.parse(v); } } catch(e){} return (k in mem)?mem[k]:d; },
+    set(k, v){ try { if(ok){ window.localStorage.setItem(k, JSON.stringify(v)); return; } } catch(e){} mem[k]=v; }
+  };
+})();
+
+/* ---------- estado ---------- */
+const State = {
+  tab: 'inicio',
+  studied: Store.get('z.studied', {}),     // {chapterId:true}
+  checks: Store.get('z.checks', {}),       // checklist cierre
+  ficha: null, battlecard: null,
+  pitchSeg: '30s',
+  saveStudied(){ Store.set('z.studied', this.studied); Cloud.queuePush(); },
+  saveChecks(){ Store.set('z.checks', this.checks); Cloud.queuePush(); },
+};
+
+/* ---------- iconos SVG (stroke 2, 24px) ---------- */
+const I = {
+  home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>',
+  book:'<path d="M4 4.5C4 3.7 4.7 3 5.5 3H19a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H5.5A1.5 1.5 0 0 0 4 21.5z"/><path d="M4 18.5A1.5 1.5 0 0 1 5.5 17H20"/>',
+  target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  chev:'<path d="m9 6 6 6-6 6"/>',
+  back:'<path d="m15 6-6 6 6 6"/>',
+  caret:'<path d="m6 9 6 6 6-6"/>',
+  store:'<path d="M4 9 5.5 4h13L20 9"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M4 9a3 3 0 0 0 5.3 0 3 3 0 0 0 5.4 0A3 3 0 0 0 20 9"/><path d="M9 20v-6h6v6"/>',
+  swords:'<path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6M16 16l4 4M19 21l2-2"/><path d="M9.5 17.5 21 6V3h-3L6.5 14.5"/><path d="m11 19-6-6M8 16l-4 4M5 21l-2-2"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M12 8v4M12 16h.01"/>',
+  calc:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 6h6M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15v4M8 19h4"/>',
+  translate:'<path d="M4 5h10M9 3v2M11 5c0 5-3 8-7 9M7 8c0 3 3 5 6 6"/><path d="m14 19 3-7 3 7M15.5 16h3"/>',
+  mega:'<path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M14 8a5 5 0 0 1 0 8M16.5 5.5a9 9 0 0 1 0 13"/>',
+  route:'<circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5"/>',
+  checklist:'<path d="M9 5h10M9 12h10M9 19h10"/><path d="m3.5 5 1 1 2-2M3.5 12l1 1 2-2M3.5 19l1 1 2-2"/>',
+  check:'<path d="m5 12 5 5L20 6"/>',
+  flame:'<path d="M12 2c1 4 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 1.5-4 .8 1 2 1.2 2-1 0-1.5-.5-2.5 1.5-4Z"/>',
+  bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+  layers:'<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5M3 17l9 5 9-5" opacity=".55"/>',
+  spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/>',
+  scroll:'<path d="M8 3h9a2 2 0 0 1 2 2v12a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7"/><path d="M4 7a2 2 0 0 1 4 0v10"/><path d="M11 8h5M11 12h5"/>',
+  compass:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+  quote:'<path d="M7 7H4v6h3l-1.5 4M17 7h-3v6h3l-1.5 4"/>',
+};
+function icon(name, cls){
+  return `<svg class="${cls||''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${I[name]||''}</svg>`;
+}
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ===========================================================================
+   DATOS — destilados fielmente de "La Biblia del Vendedor de Zentor"
+   =========================================================================== */
+const DATA = {};
+
+DATA.meta = {
+  version:'v0.5.0',
+  sprint:'Cierre del Sprint 4 — Fiscal CFDI 4.0 entregado y auditado',
+  pipeline:62, modulos:7, giros:10, battlecards:7,
+};
+
+DATA.creed = {
+  rule:'Vendemos con verdad.',
+  body:'Nunca prometas lo que Zentor no hace todavía. Lo construido se vende como construido; lo que viene en el camino, como visión. La confianza es nuestro activo más caro — no la quemes por una comisión.'
+};
+
+DATA.tesis = 'Zentor es el sistema operativo en la nube de tu negocio —hecho para tu giro— que te quita el Excel y reduce tu dependencia del contador.';
+
+DATA.etica = [
+  { t:'Verdad sobre el estado', d:'✅ construido se vende como hecho; 🔜 roadmap como visión. Jamás vendas como presente lo que no existe (incluido el LMS).' },
+  { t:'Precio transparente y estable', d:'Nada de bait and switch. El dolor que el mercado le tiene a la competencia (precios que cambian) es nuestro diferenciador. No lo traiciones.' },
+  { t:'El cliente sobre la comisión', d:'Si Zentor no es para ese giro hoy (ej. restaurante sin POS), dilo y registra el contacto. Un "no hoy" honesto vale más que un cliente decepcionado en una zona pequeña.' },
+];
+
+/* ----- PARTE I — POR QUÉ CREERÁS EN ZENTOR ----- */
+DATA.parteI = {
+  id:'I', n:'I', titulo:'Por qué creerás en Zentor',
+  intro:'El prospecto huele el miedo y huele la fe. Si tú no estás convencido de que Zentor es superior, ninguna técnica de cierre te salva. Esta parte existe para que creas con la cabeza, no con el corazón: cada afirmación viene con su razón.',
+  caps:[
+    { id:'1', n:'1', t:'La tesis y tu elevator pitch', html:`
+      <p><strong>La tesis de Zentor (apréndela de memoria):</strong> el líder del mercado mexicano (Aspel) es de <strong>escritorio, horizontal y pensado para el contador</strong>. Los retadores en la nube (Bind, Alegra) ganan en pantalla pero siguen siendo <strong>genéricos</strong> — el mismo sistema para una ferretería que para un consultorio. <strong>Nadie construye software vertical y profundo para la operación de cada giro, y nadie entra por una consultoría que diagnostica el proceso y siembra el sistema a la medida.</strong> Ese hueco es Zentor.</p>
+      <div class="quote"><span class="ql">En una frase</span>Zentor es el sistema operativo en la nube de tu negocio —hecho para tu giro— que te quita el Excel y reduce tu dependencia del contador.</div>
+      <p><strong>Tus tres pitches según el tiempo que te den:</strong></p>
+      <ul>
+        <li><strong>30 segundos (en la puerta):</strong> <em>"Soy de Zentor. Ayudamos a negocios como el suyo a controlar inventario, ventas y lo que le deben en un solo sistema en la nube, con su factura 4.0 ya incluida — sin Excel y sin pagarle horas extra al contador. ¿Le robo 10 minutos para mostrarle cómo se vería con sus propios productos?"</em></li>
+        <li><strong>2 minutos (sentados):</strong> el dolor (Excel + facturas a mano + no saber quién le debe) → la solución (la compra sube el inventario y lo que usted debe; la venta lo baja y registra lo que le deben; y la factura sale timbrada sola) → la diferencia (hecho para su giro, en su celular, con quien lo acompaña a arrancarlo).</li>
+        <li><strong>10 minutos (la demo):</strong> Parte II + la ficha de su industria (Parte III) + el "antes y después".</li>
+      </ul>
+      <div class="note-strip warn"><span class="ns-i">${icon('spark')}</span><div><strong>Por qué funciona (dato):</strong> el pitch ataca los dos dolores universales — el soporte/acompañamiento (la palanca #1: "alguien me guíe") y la carga del contador (el norte de Zentor: menos horas de captura).</div></div>
+    `},
+    { id:'2', n:'2', t:'El dolor del mercado (con cifras)', html:`
+      <p>El negocio mediano de LATAM vive tres dolores que tú vas a nombrar mejor que él:</p>
+      <ol>
+        <li><strong>El Excel se rompe.</strong> Inventario en una hoja, ventas en otra, lo que le deben en una libreta. Cuando vende, no sabe si tiene; cuando compra, no sabe si ya tenía. El costo no es el Excel — es la <strong>mercancía muerta, la venta perdida por desabasto y el robo hormiga</strong>.</li>
+        <li><strong>El contador es caro y lento.</strong> Paga horas de captura y se entera de su realidad fiscal un mes después. El norte de Zentor es bajar esa factura: el sistema le entrega al contador lo que necesita, <strong>ya capturado</strong>.</li>
+        <li><strong>Aspel es de escritorio.</strong> Atado a una PC, sin el celular del vendedor en ruta, sin portal. Funciona, pero es un <em>.exe</em> de hace 20 años. La pregunta del prospecto no es "¿me cambio?", es "<strong>¿a quién?</strong>".</li>
+      </ol>
+      <div class="quote"><span class="ql">Por qué pagan hoy — el listón a igualar</span>(1) cumplimiento fiscal automático CFDI/Carta Porte/DIOT; (2) <strong>una sola fuente de verdad</strong> — la compra afecta inventario+CxP, la venta inventario+CxC (el <strong>80% del valor</strong>); (3) control y visibilidad; (4) el idioma del contador; (5) marca/confianza; (6) ecosistema para crecer. Zentor iguala los seis y suma lo que los demás no tienen.</div>
+    `},
+    { id:'3', n:'3', t:'Por qué AHORA (el timing es tu aliado)', html:`
+      <ul>
+        <li><strong>El SAT obliga.</strong> CFDI 4.0 es ley. Quien no timbra bien, no cobra. Zentor nace con <strong>timbrado nativo</strong> — no es un módulo extra, es el corazón.</li>
+        <li><strong>La nube ya ganó.</strong> El miedo de "¿y si se cae la luz / se roban la PC?" lo resuelve la nube — y eso lo entiende hasta el dueño más analógico.</li>
+        <li><strong>El migrante de Aspel está listo.</strong> Millones de PyMES lo usan y sienten que se quedó en el tiempo. Zentor los hace sentir en casa pero en <strong>3 pasos, no 10</strong>.</li>
+        <li><strong>La cabeza de playa es real.</strong> Arrancamos en distribución mediana de Cancún / QRoo, con <strong>62 prospectos verificados</strong> (DENUE/INEGI). No vendemos al aire — vendemos a una lista.</li>
+      </ul>
+    `},
+    { id:'4', n:'4', t:'La competencia, honesta y con datos', html:`
+      <div class="note-strip warn"><span class="ns-i">${icon('shield')}</span><div><strong>Regla:</strong> nunca hables mal del competidor con mentiras. Reconoce lo que hacen bien (da credibilidad) y marca con datos dónde ganamos.</div></div>
+      <table class="dtable"><thead><tr><th>Competidor</th><th>Dónde ganamos</th></tr></thead><tbody>
+        <tr><td>Aspel SAE</td><td>Nube + móvil offline + profundidad vertical + portal + 3 pasos no 10.</td></tr>
+        <tr><td>Bind ERP</td><td>Hecho para tu giro + acompañamiento de implementación.</td></tr>
+        <tr><td>Alegra</td><td>La facilidad + la profundidad de un ERP de verdad.</td></tr>
+        <tr><td>CONTPAQi</td><td>El dueño opera su día; el contador recibe lo suyo ya capturado.</td></tr>
+        <tr><td>Odoo</td><td>La potencia sin el muro de complejidad, para la PyME sin TI.</td></tr>
+      </tbody></table>
+      <div class="quote"><span class="ql">La frase para el escéptico</span>"No le digo que Aspel sea malo — fue lo mejor de su época. Le digo que su época era de escritorio. Zentor es lo que Aspel sería si se diseñara hoy: en la nube, en su celular, hecho para SU giro, y con alguien que lo acompaña a arrancarlo."</div>
+    `},
+    { id:'5', n:'5', t:'El foso: por qué no nos copian fácil', html:`
+      <p>Cuatro defensas (Blue Ocean — <em>Eliminar / Reducir / Elevar / Crear</em>):</p>
+      <ol>
+        <li><strong>Profundidad vertical</strong> — <em>Elevar.</em> Las ediciones por arquetipo (farmacia, ferretería, hotel…) hablan tu giro. Copiarlo exige conocer cada industria a fondo.</li>
+        <li><strong>Portal B2B de autopedido</strong> — <em>Crear.</em> El cliente de tu cliente pone su pedido y entra solo, sin recaptura. La investigación dice que <strong>todos lo desean y nadie lo hace bien</strong>.</li>
+        <li><strong>Consultoría como distribución</strong> — <em>Eliminar la complejidad.</em> Entramos por un diagnóstico, no por un anuncio. La red de partners <strong>Nova</strong> lo escala.</li>
+        <li><strong>Inteligencia de datos</strong> — el foso final. Al operar muchas distribuidoras, Zentor acumula <strong>benchmarks de precios, rotación y demanda por zona</strong> que nadie más tiene.</li>
+      </ol>
+      <div class="note-strip"><span class="ns-i">${icon('layers')}</span><div><strong>Crossing the Chasm:</strong> dominamos un nicho (distribución QRoo) antes de expandir. <em>Land &amp; expand.</em> Vender a un mercado enfocado es fortaleza, no límite.</div></div>
+    `},
+    { id:'6', n:'6', t:'La visión que vendes', html:`
+      <p>El prospecto no compra un sistema, compra <strong>a dónde lo va a llevar</strong>:</p>
+      <ul>
+        <li><strong>De herramienta a asistente que trabaja por ti.</strong> Hoy Zentor es el sistema que tú operas. Mañana, el sistema hace el trabajo rutinario solo —captura facturas, cuadra el banco, sugiere la compra, persigue la cobranza. <em>(Tú NO uses las siglas "SaaS→AaaS" con el prospecto.)</em></li>
+        <li><strong>La red.</strong> Cuando tu proveedor y tu cliente también usan Zentor, la venta de uno es la compra del otro, sin recapturar. <em>"Come for the tool, stay for the network."</em></li>
+        <li><strong>Menos contador, no menos control.</strong> El norte es reducir las horas de captura. <em>(Matiz honesto: dictamen y firma siguen requiriendo contador; Zentor lo vuelve aliado, no lo desplaza.)</em></li>
+      </ul>
+      <div class="quote"><span class="ql">La frase de visión</span>"Hoy le quitamos el Excel. En un año, el sistema le captura las facturas y le concilia el banco solo. Usted no está comprando un programa — está subiéndose al tren antes de que arranque."</div>
+    `},
+  ]
+};
+
+/* ----- PARTE II — QUÉ ESTÁS VENDIENDO (módulos) ----- */
+DATA.parteII = {
+  id:'II', n:'II', titulo:'Qué estás vendiendo',
+  intro:'No puedes vender lo que no entiendes. El estado es sagrado: ✅ construido se vende como hecho; 🔜 roadmap como visión, nunca como presente.',
+  caps:[
+    { id:'7', n:'7', t:'Cimientos — seguro y en tu bolsillo', estado:'built', html:`
+      <p><strong>Qué es:</strong> la base sobre la que todo corre. Multi-empresa (cada negocio aislado), roles (el dueño ve todo; el vendedor no ve costos), y app móvil que funciona <strong>sin internet</strong> (offline-first).</p>
+      <p><strong>El dolor que quita:</strong> "no quiero que mi vendedor vea mis márgenes" / "se cae el internet en la bodega y se para todo" / "tengo dos sucursales y no las puedo separar".</p>
+      <div class="aja"><div class="lbl">${icon('bolt')} Ejemplo real</div><p>El vendedor sale a ruta sin señal, toma 8 pedidos en el celular; al volver el internet, se suben solos sin duplicarse. El dueño, desde su casa, ve la venta del día.</p></div>
+      <p style="margin-top:14px"><strong>vs Aspel:</strong> Aspel vive en una PC; si quieres móvil, es un parche. Zentor nace móvil y multi-sucursal.</p>
+    `},
+    { id:'8', n:'8', t:'Inventario y costos', estado:'built', html:`
+      <p><strong>Qué es:</strong> catálogo, <strong>kardex</strong> (historial de cada entrada/salida), <strong>costeo promedio</strong>, multi-almacén y traspasos. Maneja unidad de compra vs. venta (compras la caja de 20, vendes por pieza — convierte solo).</p>
+      <p><strong>El dolor que quita:</strong> "no sé qué tengo" / "compro caja y vendo pieza y no cuadra".</p>
+      <div class="aja"><div class="lbl">${icon('bolt')} Ejemplo (ferretería)</div><p>Compras un bulto de 50 kg de clavo; vendes por kilo. Zentor baja el inventario por kilo y te dice tu costo real por kilo — sin calculadora.</p></div>
+      <p style="margin-top:14px"><strong>Por qué así:</strong> toda alta/baja pasa SIEMPRE por kardex; nunca se edita a mano. Esa regla evita que dos personas vendiendo a la vez descuadren el inventario — el error #1 de los sistemas baratos.</p>
+      <div class="note-strip"><span class="ns-i">${icon('route')}</span><div><strong>Profundidad que viene (🔜):</strong> lotes/caducidades (FEFO) y centros de costo (economato) — clave para farmacia y hotelería.</div></div>
+    `},
+    { id:'9', n:'9', t:'Compras y proveedores', estado:'built', html:`
+      <p><strong>Qué es:</strong> orden de compra → recepción (sube el inventario) → factura del proveedor con <strong>3-way match</strong> → cuentas por pagar (CxP). Más devolución, sugerencia de compra y datos para la DIOT.</p>
+      <p><strong>El dolor que quita:</strong> "me facturan de más y no me doy cuenta" / "no sé a quién le debo ni cuándo vence".</p>
+      <div class="aja"><div class="lbl">${icon('bolt')} Ejemplo real</div><p>El proveedor te factura 110 piezas pero recibiste 100. Zentor lo caza en el 3-way match y no te deja pagar de más.</p></div>
+      <p style="margin-top:14px"><strong>Por qué así:</strong> este es el <strong>80% del valor</strong> de un ERP — la compra sube inventario y CxP sin doble captura. Criterio de aceptación: "una compra sube inventario y CxP solo" ✅.</p>
+    `},
+    { id:'10', n:'10', t:'Ventas y clientes', estado:'built', html:`
+      <p><strong>Qué es:</strong> cotización → pedido → factura, listas de precios por cliente, límite y días de crédito, vendedores y comisiones, app del vendedor offline, devolución con nota de crédito. La venta baja inventario y sube CxC.</p>
+      <p><strong>El dolor que quita:</strong> "le cotizo y luego recapturo todo para facturar" / "no sé cuánto crédito darle a cada cliente".</p>
+      <div class="aja"><div class="lbl">${icon('bolt')} Ejemplo real</div><p>El vendedor cotiza a precio especial; al aceptar, el pedido y la factura heredan ese precio sin volver a teclear (cero recaptura), y la comisión se calcula sola.</p></div>
+      <p style="margin-top:14px"><strong>Por qué así:</strong> "una venta con CFDI 4.0 timbrado baja inventario y sube CxC solo" ✅. El precio se bloquea del pedido a la factura, y el vendedor nunca ve el costo/margen.</p>
+    `},
+    { id:'11', n:'11', t:'Fiscal CFDI 4.0', estado:'built', html:`
+      <p><strong>Qué es:</strong> el timbrado completo — factura de ingreso, complemento de pago (REP), cancelación con motivos, factura global, series y folios por sucursal. Más el <strong>exportador contable</strong> (pólizas para el contador) y el formato impreso con QR del SAT.</p>
+      <p><strong>El dolor que quita:</strong> "timbrar es un dolor" / "el SAT me rechaza facturas" / "le paso al contador papeles y me cobra horas".</p>
+      <div class="aja"><div class="lbl">${icon('bolt')} Ejemplo real</div><p>Vendes a crédito (PPD); cuando te pagan, Zentor genera el REP solo. A fin de mes el contador recibe las pólizas ya cuadradas con código agrupador del SAT — no captura nada.</p></div>
+      <p style="margin-top:14px"><strong>Por qué así:</strong> el cumplimiento fiscal es el #1 por el que pagan. El timbrado está aislado tras un adaptador — cuando el SAT cambie, se ajusta en un punto. <em>(Honestidad: el sistema EXPORTA para el contador; no sustituye su dictamen/firma.)</em></p>
+    `},
+    { id:'12', n:'12', t:'Cobranza automática y tablero', estado:'road', tag:'Sprint 5', html:`
+      <p><strong>Qué es:</strong> el motor que persigue la cobranza solo (recordatorios por correo/WhatsApp), el <strong>tablero del dueño</strong> ("qué tengo / quién me debe / a quién le debo" en una pantalla) y los reportes.</p>
+      <p><strong>El dolor que quita:</strong> "se me olvida cobrar y el dinero se queda en la calle" / "no tengo una foto de mi negocio".</p>
+      <div class="note-strip"><span class="ns-i">${icon('clock')}</span><div><strong>Estado honesto:</strong> en construcción (Sprint 5). Se vende como lo que viene en la versión vendible — no como presente. La cobranza manual ya existe; la automática es el siguiente paso.</div></div>
+    `},
+    { id:'13', n:'13', t:'Portal B2B de autopedido', estado:'road', tag:'v1.0 · diferenciador estrella', html:`
+      <p><strong>Qué es:</strong> un portal donde <strong>el cliente de tu cliente</strong> ve su catálogo con sus precios, arma su carrito y pone su propio pedido — que entra solo al sistema, sin recaptura. Más "reordenar mi último pedido de un toque".</p>
+      <p><strong>El dolor que quita:</strong> "mis clientes me hablan por WhatsApp a las 11 pm y mi vendedor recaptura todo a mano" / "pierdo pedidos porque no contesto a tiempo".</p>
+      <div class="aja"><div class="lbl">${icon('spark')} El diferenciador</div><p>La investigación lo dice claro: el portal B2B lo desean todos y nadie lo hace bien. Es la pieza que te diferencia de Aspel/Bind/Alegra de un solo golpe.</p></div>
+      <div class="note-strip" style="margin-top:14px"><span class="ns-i">${icon('layers')}</span><div>Llega en v1.0.0. Se vende como el porqué Zentor crece contigo y la entrada a la red.</div></div>
+    `},
+    { id:'14', n:'14', t:'El futuro sembrado', estado:'road', tag:'post-1.0', html:`
+      <p>Esto vende el <strong>techo alto</strong> del producto. Sé claro: es a futuro, no hoy.</p>
+      <div class="quote"><span class="ql">Cuéntaselo así (sin tecnicismos)</span>"Hoy Zentor le ordena el negocio. Lo que viene es que el sistema trabaje por usted: arrastra la hoja del SAT de un cliente nuevo y el sistema llena todos sus datos solo. A fin de mes, revisa su banco y lo cuadra con sus ventas, y solo le pregunta lo que no entiende. Su contador deja de capturar y empieza a revisar. Y ojo: nada se cobra ni se paga sin que usted lo apruebe."</div>
+      <p><strong>Por dentro (para que TÚ entiendas el techo — NO con estas palabras al prospecto):</strong></p>
+      <ul>
+        <li><strong>v1.1</strong> Contabilidad en tiempo real — las pólizas se arman solas.</li>
+        <li><strong>v1.2</strong> Copiloto contable — captura facturas, cuadra el banco, da de alta clientes desde su constancia.</li>
+        <li><strong>v1.5</strong> Inteligencia de datos — tu margen vs. el promedio de tu zona (el foso).</li>
+        <li><strong>v2.0</strong> Caja (POS), fábrica y asistentes que negocian compras en la red.</li>
+      </ul>
+      <div class="note-strip warn"><span class="ns-i">${icon('x')}</span><div><strong>Regla del vendedor:</strong> al prospecto solo le pintas el beneficio. <strong>NUNCA</strong> le digas "agentes de IA", "MCP", "AaaS", "ledger" ni "machine learning" — a un dueño mayor lo asustan o lo pierden.</div></div>
+    `},
+    { id:'15', n:'15', t:'El canal Nova (para el partner)', estado:'road', html:`
+      <p><strong>Qué es:</strong> el modelo de red de partners estilo SAP PartnerEdge: ZaharDev → partners certificados → clientes. Los partners venden, implementan (con "Nova Activate") y dan soporte, con <em>revenue-share</em>.</p>
+      <p><strong>Por qué te importa:</strong> si eres partner, Zentor no es un producto que revendes — es un <strong>negocio que construyes</strong> (cartera, ingreso recurrente, implementación cobrada). La consultoría de diagnóstico es tu puerta de entrada.</p>
+      <div class="note-strip"><span class="ns-i">${icon('clock')}</span><div><strong>Estado:</strong> la tenencia multi-nivel ya nace en el esquema; la plataforma de partners es post-MVP.</div></div>
+    `},
+  ]
+};
+
+/* ----- PARTE III — FICHAS POR GIRO ----- */
+DATA.fichas = [
+  { id:'distribuidora', e:'📦', nombre:'Distribuidora / Mayoreo', sub:'El corazón — donde Zentor brilla HOY', star:true,
+    dolor:'El ciclo completo: compra (sube inventario+CxP) → venta (baja inventario+CxC) → vendedores en ruta → cobranza. Listas de precios por cliente, crédito, comisiones. Es exactamente el MVP de Zentor.',
+    vocab:['ruta','vendedor foráneo','lista de precios','crédito','días de crédito','cartera','comisión','el surtido','mayoreo','medio mayoreo'],
+    aja:'TODO — su vendedor toma el pedido en ruta sin internet, con el precio de ese cliente, y al volver entra solo; usted ve la venta del día, quién le debe, y la factura sale timbrada. Es el flujo entero, sin Excel.',
+    roi:'Este es el caso donde Zentor está 100% listo. La distribuidora es la cabeza de playa (62 prospectos QRoo). Compites de frente con Aspel y ganas en móvil + portal B2B + 3 pasos.',
+    obj:{q:'(arma la cuña según su dolor — aquí ganas de frente)', a:'Aquí no necesitas defender: muestra el flujo completo en su celular y deja que lo toque.'},
+    pitch:'Una distribuidora vive de comprar bien, surtir rápido y cobrar a tiempo. Zentor le une las tres: la compra cuadra el inventario, el vendedor toma pedidos en ruta sin internet, la venta baja inventario y le dice quién le debe, y la factura sale timbrada sola. Todo en la nube y en el celular — lo que Aspel no le da.'
+  },
+  { id:'farmacia', e:'💊', nombre:'Farmacia / botica', sub:'Caducidades y controlados',
+    dolor:'Muchísimos SKUs, caducidades (lo que no rota se vence = pérdida directa), medicamentos controlados (receta y bitácora), IVA mixto, mostrador rápido + crédito a clínicas.',
+    vocab:['caducidad','lote','controlados','cuadro básico','merma','rotación','patente','genérico','recetas'],
+    aja:'"Zentor le avisa qué está por caducar antes de que se le venza" (lotes/FEFO — 🔜 v1.3, sé honesto que viene) + "controla qué medicina sale, con su factura del SAT, y le dice cuáles no se mueven".',
+    roi:'La merma por caducidad en farmacia puede ser el margen de un mes. Si Zentor le evita vencer aunque sea una parte, se paga solo.',
+    obj:{q:'"Yo ya sé qué se vende."', a:'"Claro, usted conoce su negocio. Lo que Zentor le da es la parte que NO ve: lo que está parado caducándose en el anaquel de hasta atrás."'},
+    pitch:'En una farmacia, lo que no rota se vence — y eso es dinero a la basura. Zentor le controla el inventario por caducidad, le avisa qué mover, le saca la factura del SAT sola y le dice qué medicina le deja y cuál no. Todo en su celular.'
+  },
+  { id:'abarroteria', e:'🛒', nombre:'Abarrotería / minisúper', sub:'Volumen, fiados y merma',
+    dolor:'Altísima rotación, cientos de SKUs, mostrador veloz, fiados (crédito informal en libreta), mermas, proveedores con precios que cambian, compra por caja / venta por pieza.',
+    vocab:['mostrador','fiado','merma','surtido','caja/pieza','consignación','rotación'],
+    aja:'"El fiado de la libreta se vuelve cuentas por cobrar de verdad — sabe quién le debe y desde cuándo" + "compra caja, vende pieza, y el sistema le saca su costo y ganancia reales".',
+    roi:'El fiado mal controlado y la merma se comen el margen (que ya es delgado). Recuperar un punto de margen en alto volumen es mucho dinero.',
+    obj:{q:'"Mis clientes son de confianza, no necesito sistema para el fiado."', a:'"Y por eso mismo se le acumula y le da pena cobrar. El sistema cobra por usted, sin que usted quede mal."'},
+    pitch:'En el abarrote todo es volumen y centavos. Zentor le cuadra el inventario al instante, le convierte el fiado de la libreta en cuentas claras que se cobran solas, y le dice de verdad cuánto gana por producto. Desde su celular, sin Excel.'
+  },
+  { id:'ferreteria', e:'🔧', nombre:'Ferretería / materiales', sub:'A granel vs. pieza, crédito de obra',
+    dolor:'SKUs técnicos (medidas, calibres), compra a granel / venta por pieza o kilo (bulto, rollo, metro), crédito de obra a constructores, muchas cotizaciones, precios por volumen.',
+    vocab:['a granel','por pieza/metro/kilo','bulto/rollo/millar','factor','cotización','crédito de obra','el material','el surtido'],
+    aja:'La unidad de compra vs. venta con factor — "compra el bulto, vende por kilo, y Zentor convierte solo y le da su costo real" + cotización → pedido → factura sin recapturar.',
+    roi:'El descontrol entre unidades hace que el ferretero crea que gana y esté perdiendo. Zentor le pone el margen real enfrente.',
+    obj:{q:'"Cada material se vende distinto, ningún sistema le atina."', a:'"Justo por eso Zentor maneja unidad de compra y de venta con factor — está hecho para el que vende a granel y por pieza."'},
+    pitch:'La ferretería pierde dinero entre el bulto que compra y el kilo que vende. Zentor convierte solo, le da su costo y ganancia reales, le cotiza y factura sin recapturar, y le controla el crédito de obra para que no se le quede el dinero en la calle.'
+  },
+  { id:'refaccionaria', e:'🔩', nombre:'Refaccionaria / autopartes', sub:'Catálogo por número de parte',
+    dolor:'Catálogo enorme por número de parte y aplicación (marca/modelo/año), equivalencias, crédito a talleres, mostrador. "¿Tienes la pieza?" es la pregunta de todo el día.',
+    vocab:['número de parte','aplicación','equivalencia','OEM/genérico','para qué carro','mostrador','el catálogo'],
+    aja:'Búsqueda rápida en el celular + clave alterna (buscar por número de parte) + saber al instante si hay y en cuál sucursal/almacén (multi-almacén).',
+    roi:'La venta perdida por "no sé si tengo" o por buscar 10 minutos una pieza. Cada venta que no se cae por desabasto desconocido es margen recuperado.',
+    obj:{q:'"Mi catálogo es muy específico."', a:'"Por eso Zentor maneja clave alterna y multi-almacén — para que en 5 segundos sepa si tiene la parte y en qué sucursal."'},
+    pitch:'En refacciones, el que contesta más rápido "¿sí tengo?" vende. Zentor le pone su catálogo por número de parte en el celular, le dice al instante qué hay y en cuál sucursal, y le controla el crédito de los talleres. Menos venta perdida, más control.'
+  },
+  { id:'club', e:'🍸', nombre:'Club nocturno / bar / beach club', sub:'Merma de licor por barra',
+    dolor:'Inventario de licores con merma y robo altos (la botella que "se evapora"), recetas de cócteles, consumo por barra, rotación nocturna intensa, varias barras/áreas.',
+    vocab:['barra','merma','la botella','consumo','receta de coctel','cover','el back','lo que se va'],
+    aja:'Control de inventario de licor por barra + costeo de receta (cuánto cuesta cada trago) → cazar la merma/robo. (Recetas/costeo fino = 🔜; control de inventario + traspasos por área es hoy.)',
+    roi:'En un bar, la merma de licor puede ser el 10–20% del costo de barra. Cazar la mitad es una utilidad enorme.',
+    obj:{q:'"Mi negocio es de noche, no de sistemas."', a:'"Por eso le interesa: la merma se va de noche. Zentor le dice cuánto licor debió quedar vs. cuánto quedó — ahí está su robo."'},
+    pitch:'En la barra, lo que no controla se lo roban o se evapora. Zentor le cuadra el licor por barra, le dice cuánto debió quedar contra lo que quedó, y le saca su costo por trago. Su merma deja de ser un misterio.'
+  },
+  { id:'hoteleria', e:'🏨', nombre:'Hotelería / hostales', sub:'Economato y centros de costo (USALI)',
+    dolor:'Economato (almacén central que surte a áreas), requisiciones internas, centros de costo (cuánto consume cada área), control de A&B, estándar USALI. El decisor suele ser el contralor o gerente.',
+    vocab:['economato','requisición','centro de costo','USALI','A&B (F&B)','ama de llaves','consumo interno','almacén general'],
+    aja:'El almacén central → consumo interno con destino a centro de costo (housekeeping vs. cocina). (Reservado/en camino; sé honesto del estado, pero el lenguaje USALI te abre la puerta con el contralor.)',
+    roi:'Sin centros de costo, el hotel no sabe qué área se le come el presupuesto. Visibilidad = control de costo = puntos de margen.',
+    obj:{q:'(contralor) "Yo ya manejo USALI en Excel."', a:'"Y por eso captura dos veces y se entera tarde. Zentor le da los centros de costo vivos, no a fin de mes."'},
+    pitch:'(al contralor) Usted maneja economato y centros de costo en Excel — y se entera del consumo de cada área cuando ya pasó. Zentor le da el almacén general con requisiciones y consumo por centro de costo en vivo, en lenguaje USALI. Menos captura, más control del A&B.'
+  },
+  { id:'fabrica', e:'🏭', nombre:'Fábrica / manufactura ligera', sub:'Insumos hoy, BOM en v2.0',
+    dolor:'Materia prima → producto terminado (receta/BOM), órdenes de producción, mermas de proceso, costeo del terminado.',
+    vocab:['materia prima','BOM/receta','orden de producción','merma de proceso','producto terminado','planta'],
+    aja:'Honestidad clave: Zentor HOY controla insumos, producto terminado, compras y ventas de una planta. La transformación (BOM/órdenes) es v2.0. Véndelo así: "hoy le controlo todo menos la receta de producción; eso viene".',
+    roi:'Control de materia prima + costeo real del terminado.',
+    obj:{q:'"¿Maneja órdenes de producción?"', a:'"Hoy le controlo materia prima, compras, inventario y venta del terminado con su fiscal; la receta de producción la sumamos en la siguiente etapa. Empiece por ordenar lo que ya le duele."'},
+    pitch:'Su planta es, al final, almacenes con stock que se transforma. Zentor le controla hoy la materia prima, las compras, el inventario y la venta del producto terminado, con su fiscal incluido; la receta de producción la sumamos en la siguiente etapa.'
+  },
+  { id:'restaurante', e:'🍽️', nombre:'Restaurante', sub:'Baja prioridad (POS = v2.0)',
+    dolor:'Normalmente ya usa SoftRestaurant y necesita POS de caja, que Zentor aún no tiene (POS = v2.0). No es nuestro mejor prospecto hoy.',
+    vocab:['POS','caja','comanda','back office','receta','costeo'],
+    aja:'Si te topas uno interesado: posiciona el back office (inventario, compras, costeo de recetas 🔜, fiscal) como complemento, no reemplazo del POS; y siembra para cuando llegue el POS de Zentor.',
+    roi:'No fuerces la venta — registra el contacto y prioriza giros donde ganamos hoy.',
+    obj:{q:'"¿Tiene punto de venta para mi caja?"', a:'(honesto) "El POS de caja viene en v2.0. Hoy le puedo ordenar el back office: inventario, compras, costeo y su fiscal. Cuando llegue el POS, usted ya está listo."'},
+    pitch:'(siembra honesta) Hoy su caja la lleva su POS. Lo que Zentor le ordena es la cocina por dentro: inventario, compras, costeo de recetas y su fiscal. Y cuando salga nuestro POS, usted ya tiene el negocio cuadrado para sumarlo.'
+  },
+  { id:'otros', e:'🧩', nombre:'Otros giros', sub:'Papelería, agroinsumos, eléctricos…',
+    dolor:'Casi todos los negocios de "compro, almaceno, vendo y cobro" encajan en el corazón de Zentor (patrón de distribución/mayoreo).',
+    vocab:['compra','inventario','venta','cobranza','crédito','el surtido'],
+    aja:'Usa las 4 preguntas de descubrimiento para detectar su dolor específico y arma la ficha en vivo, sobre el patrón de la distribuidora (17.8).',
+    roi:'El mismo del ciclo completo: control de inventario, cartera y fiscal sin Excel.',
+    obj:{q:'"¿Sirve para MI giro?"', a:'"Si usted compra, almacena, vende y cobra, Zentor es para usted. Déjeme hacerle 4 preguntas y le digo exactamente cómo le ayuda."'},
+    pitch:'Si su negocio compra, guarda, vende y cobra, Zentor le une las cuatro en un solo sistema en la nube y en su celular: inventario al día, quién le debe, su factura del SAT sola. Dígame qué es lo que más batalla y le muestro cómo se ve resuelto.'
+  },
+];
+
+/* las 4 preguntas de descubrimiento */
+DATA.descubrimiento = [
+  { q:'¿Cómo lleva hoy el control de lo que entra y sale?', tag:'inventario' },
+  { q:'¿Cómo sabe quién le debe y a quién le debe?', tag:'cartera' },
+  { q:'¿Cómo le hace con las facturas del SAT?', tag:'fiscal' },
+  { q:'Si mañana no viene a trabajar, ¿se entera de cómo le fue al negocio?', tag:'visibilidad' },
+];
+
+/* ----- PARTE IV — BATTLECARDS ----- */
+DATA.metodo = {
+  intro:'La objeción que MÁS vas a oír no es "está caro" — es "ya tengo [sistema X]". "Ya tengo X" NO es un no: es "convénceme de por qué cambiaría". Es una puerta abierta. Cuando alguien ya paga por X, tu enemigo no es X — es la inercia y el miedo a cambiar.',
+  pasos:[
+    { t:'No pelees el costo hundido — reencuádralo', d:'"Lo que ya pagó, pagado está — no se lo regresan se quede o se vaya. La única pregunta es: los próximos meses, ¿los vive con el problema o resuelto?" (falacia del costo hundido).' },
+    { t:'El piloto en paralelo (matar el miedo)', d:'"No le pido que deje lo suyo. Corramos Zentor en paralelo dos semanas con SUS productos y precios. Si no ve la diferencia, sigue con lo que tiene y no perdió nada." El riesgo baja a cero.' },
+    { t:'La migración cronometrada', d:'(Para el que pagó un año y va en el mes 5) "Arrancamos HOY el diagnóstico y la carga de datos. Cuando le venza, ya está operando en Zentor, sin un día de caos de migración." Su tiempo restante se vuelve preparación.' },
+    { t:'El que paga mensual es presa fácil', d:'"Si paga mes a mes, no está atado a nada. Pruebe Zentor un mes; si no le sirve, vuelve a lo suyo sin penalización."' },
+    { t:'El puente (palancas de ZaharDev — sujetas a aprobación)', d:'Se puede no cobrarle hasta que termine su contrato actual, o incluir migración/capacitación. Estas condiciones se proponen sujetas a aprobación; no las prometas como fijas.' },
+    { t:'El costo de NO cambiar (el número que cierra)', d:'Cuantifica con la calculadora de ROI. Cuando el ahorro mensual de Zentor supera lo que paga por X, cambiar AHORA conviene aunque pierda lo pagado — y el costo hundido deja de importar.' },
+  ],
+  orden:'(1) reconoce X y elogia su decisión de tener un sistema → (2) pregunta su dolor con X ("¿qué es lo que MÁS batalla?") → (3) confirma que Zentor resuelve ese dolor → (4) propón piloto en paralelo o migración cronometrada → (5) cierra el siguiente paso (doble alternativa).'
+};
+
+DATA.battlecards = [
+  { id:'aspel', color:'--c-aspel', nombre:'Aspel SAE', tagline:'El titular de escritorio',
+    queEs:'El sistema administrativo (SAE) de escritorio más usado en México, de la familia Aspel (SAE, COI, NOI…). El estándar histórico.',
+    quienUsa:'PyMES establecidas y tradicionales; el contador lo domina. Licencia + actualización anual.',
+    fuerzas:['Marca de décadas y confianza','Cumple fiscal, todos lo conocen','El contador no quiere cambiar'],
+    huecos:['Escritorio: atado a una PC, sin nube ni móvil en ruta','Horizontal/genérico: no profundiza tu giro','Sin portal B2B; curva dura','10 pasos donde Zentor hace 3','Respaldo manual (¿y si se roba o descompone la PC?)'],
+    comoTomar:'Reconoce ("la mejor de su época, y su contador la quiere"). Pregunta el dolor ("¿su vendedor cómo toma pedidos en la calle? ¿usted ve su negocio desde el celular el domingo?"). Clava la cuña: nube + móvil offline + su giro + portal. Timing: se renueva anual — esa es tu ventana; migra los datos antes del vencimiento.',
+    frase:'No le digo que deje Aspel porque sea malo — le digo que Aspel vive en su PC, y su negocio vive en la calle, en el celular de su vendedor y en el de sus clientes. Zentor es Aspel, pero hecho hoy.'
+  },
+  { id:'contpaqi', color:'--c-contpaq', nombre:'CONTPAQi', tagline:'El favorito del contador',
+    queEs:'Suite contable/administrativa mexicana, muy fuerte en contabilidad. El rey de los despachos contables.',
+    quienUsa:'Empresas donde el contador manda; despachos que llevan varias empresas.',
+    fuerzas:['Contabilidad profunda','Integración fiscal sólida','Los contadores lo aman; ecosistema grande'],
+    huecos:['Centrado en el contador, no en el dueño que opera','El dueño NO lo usa — lo usa su contadora','Pesado para el operativo del día; sin ruta/portal/móvil ágil'],
+    comoTomar:'No compitas de frente — complementa. "Excelente para su contador, y no se lo voy a quitar. Pero ¿usted abre CONTPAQi para ver cuánto vendió hoy, o lo abre su contadora? CONTPAQi es de ELLA. Zentor es de USTED — usted opera, y al final le entrega a su contadora lo que necesita ya capturado."',
+    frase:'CONTPAQi es para que su contador haga su contabilidad. Zentor es para que USTED maneje su negocio — y de paso le facilite la vida al contador. ¿Hoy usted opera en algún sistema, o todo pasa por el despacho?'
+  },
+  { id:'bind', color:'--c-bind', nombre:'Bind ERP', tagline:'La nube genérica',
+    queEs:'ERP mexicano en la nube, pantalla moderna, conectores de e-commerce. Suscripción mensual.',
+    quienUsa:'PyMES que ya dieron el salto a la nube, comercios con tienda en línea.',
+    fuerzas:['Nube, UI moderna','Conectores (MercadoLibre/Amazon)','Buena primera impresión'],
+    huecos:['Genérico (el mismo sistema para una ferretería que para un consultorio)','Sin la consultoría que siembra el sistema','Profundidad vertical limitada'],
+    comoTomar:'Reconoce ("buena decisión, ya está en la nube"). Cuña: "¿Bind está hecho para SU giro, o es el mismo para todos? Zentor habla farmacia, ferretería, distribución. Y no lo dejamos solo: se lo sembramos." Timing: es mensual → el piloto en paralelo es facilísimo.',
+    frase:'Bind le dio la nube — bien por usted. Zentor le da la nube HECHA PARA SU GIRO y con alguien que se la arranca. Pruébelos lado a lado un mes; usted decide.'
+  },
+  { id:'alegra', color:'--c-alegra', nombre:'Alegra', tagline:'Fácil y ligero',
+    queEs:'Software de facturación y contabilidad en la nube (origen Colombia/LATAM), fácil, económico, con auto-facturación. Mensual.',
+    quienUsa:'Negocios chicos/medianos que quieren facturar fácil y barato.',
+    fuerzas:['Muy fácil, barato, bonito','Auto-facturación (el cliente se factura solo)'],
+    huecos:['Ligero — se queda corto al crecer','Sin kardex/costeo serios, multi-almacén, ruta, comisiones, 3-way match','Es facturación, no operación profunda'],
+    comoTomar:'Reconoce ("para facturar, excelente y barato"). Cuña: "Cuando empezó, le bastaba. Pero hoy que tiene inventario en dos lados, vendedores en ruta y crédito… ¿le alcanza? Ahí Alegra se queda chico. Zentor es la facilidad de Alegra MÁS la profundidad de un ERP." Timing: mensual → piloto en paralelo.',
+    frase:'Alegra es perfecto hasta que su negocio crece. Zentor es para cuando ya creció: la misma facilidad, pero con el control de inventario, ruta y cobranza que Alegra no le da.'
+  },
+  { id:'sinube', color:'--c-sinube', nombre:'Sinube', tagline:'La nube administrativa mexicana', warn:true,
+    queEs:'ERP/administrativo mexicano en la nube, con auto-facturación (kiosco). Compite en la nube administrativa.',
+    quienUsa:'PyMES en la nube que buscan administración + facturación.',
+    fuerzas:['Nube mexicana','Auto-facturación','Enfoque administrativo'],
+    huecos:['Horizontal como la nube general','Sin profundidad vertical por giro, ni portal B2B, ni modelo de consultoría/partners','⚠️ Verifica su oferta vigente antes de campo'],
+    comoTomar:'Igual que la nube genérica — cuña vertical + portal + acompañamiento + el piloto en paralelo.',
+    frase:'Sinube le dio la nube y la auto-factura. Zentor le da eso Y la profundidad de su giro, el portal para sus clientes y un equipo que se lo siembra. ¿Lo comparamos con sus datos?'
+  },
+  { id:'odoo', color:'--c-odoo', nombre:'Odoo', tagline:'El Ferrari que necesita mecánico',
+    queEs:'ERP modular open-source global, muy completo (CRM, inventario, contabilidad, manufactura, e-commerce…).',
+    quienUsa:'Empresas con equipo de TI o un partner Odoo; quien quiere "todo en uno" y puede pagar la implementación.',
+    fuerzas:['Potentísimo, modular, open source','Escala a empresa grande'],
+    huecos:['Complejo y caro de implementar y mantener','Necesita consultor/TI para cada cambio','No es para la PyME sin equipo técnico; la localización fiscal mexicana se compra aparte'],
+    comoTomar:'Reconoce ("potentísimo"). Cuña: "Odoo es una bestia — si tiene quién se lo mantenga. ¿Quién le hace los cambios? ¿Le cobran cada ajuste? Zentor le da lo que de verdad usa, sin el consultor caro encima." El dolor de Odoo es el costo total de propiedad.',
+    frase:'Odoo es un Ferrari que necesita su propio mecánico. Si usted no tiene equipo de TI, Zentor le da el control sin el taller de mantenimiento encima. ¿Cuánto le cuesta hoy cada cambio en Odoo?'
+  },
+  { id:'pulpos', color:'--c-pulpos', nombre:'Pulpos', tagline:'Verificar oferta antes de campo', warn:true,
+    queEs:'(⚠️ POR CONFIRMAR) Se ubica como punto de venta / gestión para PyME/comercio (mostrador, inventario, ventas), no como ERP completo. La ficha exacta DEBE verificarse con fuente antes de campo.',
+    quienUsa:'Comercio/mostrador (por confirmar alcance).',
+    fuerzas:['Operación de mostrador / POS','Inventario y ventas básicas'],
+    huecos:['No es operación completa (compra → inventario por almacén → venta → CxC → fiscal → cobranza)','Si es retail puro que quiere POS, recuerda: el POS de Zentor es v2.0 — sé honesto y posiciona el back-office'],
+    comoTomar:'Descubre primero — "Cuénteme qué hace exactamente con Pulpos" — porque su alcance es de mostrador, no de la operación completa. Luego arma la cuña según lo que descubras.',
+    frase:'¿Pulpos le resuelve el mostrador, o también la compra, el inventario por almacén, el crédito y su fiscal completo? Zentor le cubre TODO el negocio, no solo la caja. Veámoslo con su operación.'
+  },
+];
+
+/* ----- PARTE V — EL ARTE DE LA VENTA (Alex Dey + neuromarketing) ----- */
+DATA.parteV = {
+  id:'V', n:'V', titulo:'El arte de la venta',
+  intro:'Ya crees en el producto y hablas el idioma del prospecto. Ahora, cómo se cierra. Nos apoyamos en Alex Dey, "La Biblia del Vendedor" — sus técnicas, aplicadas a Zentor, con la justificación de por qué funcionan.',
+  caps:[
+    { id:'18', n:'18', t:'La mentalidad del que cree', html:`
+      <p>Alex Dey insiste: <strong>la venta empieza en tu cabeza.</strong> El prospecto compra primero tu seguridad, luego el producto. Si dudas, lo siente.</p>
+      <ul>
+        <li><strong>Convéncete con datos, no con ánimo.</strong> Tu seguridad viene de saber, no de echarle ganas.</li>
+        <li><strong>El "no" no es personal, es información.</strong> "Está caro" casi nunca es de precio; es de valor no comunicado.</li>
+        <li><strong>Tu meta no es vender, es resolver.</strong> Zentor entra por una consultoría/diagnóstico — tú eres un asesor, no un vendedor de fierros.</li>
+      </ul>
+    `},
+    { id:'19', n:'19', t:'El primer contacto', html:`
+      <p><strong>La puerta es la consultoría:</strong> no llegas a "venderle un sistema"; llegas a ofrecer un <strong>diagnóstico gratuito</strong>. Eso baja la guardia y te posiciona como experto.</p>
+      <p><strong>Romper el hielo (rapport):</strong> la gente le compra a quien le cae bien y se le parece.</p>
+      <ul>
+        <li>Observa el negocio y elogia algo sincero ("qué bien surtido tiene esto").</li>
+        <li>Habla de SU mundo — usa su vocabulario en la primera frase.</li>
+        <li>Encuentra un terreno común (la zona, el giro).</li>
+      </ul>
+      <p><strong>El abordaje:</strong> evita "¿le interesa un software?" (invita al "no"). Usa una pregunta sobre su dolor: <em>"¿Cómo le hace hoy para saber quién le debe?"</em></p>
+      <div class="quote"><span class="ql">Regla de oro</span>En el primer contacto escuchas 70%, hablas 30%. El que pregunta, controla.</div>
+    `},
+    { id:'20', n:'20', t:'El descubrimiento — preguntar es controlar', html:`
+      <p>Alex Dey lo llama <strong>el sondeo</strong>: antes de presentar, descubre el dolor. Usa las 4 preguntas + la técnica del <strong>"¿por qué?" tres veces</strong> ("se me pierde mercancía" → "¿por qué?" → "no la cuento" → "¿por qué?" → "no tengo tiempo" → ahí está el dolor: el tiempo).</p>
+      <ul>
+        <li><strong>Preguntas abiertas</strong> para que hable ("cuénteme cómo…").</li>
+        <li><strong>Preguntas cerradas</strong> para confirmar y avanzar ("¿le serviría que…?").</li>
+        <li><strong>Toma nota delante de él</strong> — comunica que lo tomas en serio.</li>
+      </ul>
+      <div class="aja"><div class="lbl">${icon('target')} El objetivo</div><p>Que él mismo nombre su dolor. Cuando el prospecto dice "sí, eso me pasa", ya vendiste la mitad.</p></div>
+    `},
+    { id:'21', n:'21', t:'La demostración — el "antes y después"', html:`
+      <p>No muestres "funciones"; muestra <strong>su vida resuelta</strong>.</p>
+      <ul>
+        <li><strong>Personaliza:</strong> mete sus propios productos/precios. Ver su catálogo en Zentor es el momento más poderoso.</li>
+        <li><strong>Antes y después:</strong> "Hoy le toma 10 minutos cotizar a mano. Mire: aquí cotizo, acepto, y la factura sale timbrada — 30 segundos."</li>
+        <li><strong>No abrumes:</strong> muestra lo que le duele a ÉL, no las 200 funciones (Ley de Hick).</li>
+        <li><strong>Deja que toque</strong> (cierre del cachorro): pásale el celular y que tome un pedido él mismo.</li>
+      </ul>
+    `},
+    { id:'22', n:'22', t:'Manejo de objeciones (Alex Dey)', html:`
+      <p><strong>Principio Dey:</strong> "la objeción es una solicitud de más información" — y muchas veces es señal de interés. Nunca discutas; acompaña.</p>
+      <div class="quote"><span class="ql">El método base</span>Sentir – Sentí – Encontré: "Entiendo cómo se siente. Otros clientes se sintieron igual. Y lo que encontraron fue que…" — valida, normaliza, reencuadra.</div>
+      <p><strong>Técnica de aislamiento:</strong> "Aparte de eso, ¿hay algo más que le impida arrancar hoy?" — si dice que no, ya solo tienes que resolver una cosa.</p>
+      <div class="note-strip"><span class="ns-i">${icon('shield')}</span><div>El manejador completo de objeciones está en tu <strong>arsenal de campo</strong> → Objeciones.</div></div>
+    `},
+    { id:'23', n:'23', t:'Las técnicas de cierre (Alex Dey)', html:`
+      <p>El cierre no es un truco final; es <strong>el cierre que se va construyendo</strong> con micro-síes.</p>
+      <ul>
+        <li><strong>Cierre por amarre.</strong> "Tener su inventario al día le quitaría dolores de cabeza, <em>¿verdad?</em>" — acumula pequeños síes (consistencia, Cialdini).</li>
+        <li><strong>Doble alternativa.</strong> No "¿lo quiere?"; pregunta entre dos síes: "¿Lo arrancamos con una sucursal o con las dos?"</li>
+        <li><strong>Cierre puercoespín.</strong> Responde una pregunta con otra que avanza: —"¿Sirve para dos sucursales?" —"¿Lo necesita para las dos desde el arranque?"</li>
+        <li><strong>Benjamin Franklin (balance).</strong> Hagan juntos pros y contras: tú ayudas con los pros, los contras los pone él (y son pocos).</li>
+        <li><strong>Cierre por conclusión.</strong> Actúa como si ya hubiera comprado: "Cuando empiece, lo primero será cargar su catálogo — ¿lo tiene en Excel?"</li>
+        <li><strong>Cierre del detalle menor.</strong> "¿A qué correo le mando el acceso?" — decidir lo chico arrastra lo grande.</li>
+        <li><strong>Cierre del cachorro (prueba).</strong> Quien lo prueba, no lo suelta (aversión a la pérdida, Kahneman).</li>
+      </ul>
+      <div class="quote"><span class="ql">Regla Dey</span>Pide la venta. El error #1 es no cerrar por miedo al no. Después de la demo, calla y cierra — el primero que habla, pierde.</div>
+    `},
+    { id:'24', n:'24', t:'La negociación de precio', html:`
+      <div class="note-strip warn"><span class="ns-i">${icon('shield')}</span><div><strong>Política ZaharDev:</strong> somos flexibles, PERO bajar el precio es el último recurso, no el primero. El que abre con descuento destruye el valor que construyó.</div></div>
+      <ol>
+        <li><strong>Defiende el valor primero.</strong> Si dice "está caro", no bajes el precio — regresa al ROI. El 80% de las veces el "caro" se resuelve con valor.</li>
+        <li><strong>Si insiste, ofrece VALOR antes que precio.</strong> Agrega: más meses de acompañamiento, capacitación, una sucursal incluida. "El precio no lo puedo mover, pero le incluyo X."</li>
+        <li><strong>La palanca del compromiso (jugada maestra):</strong> intercambia el regalo por un compromiso del cliente. "No le bajo el precio… pero si me firma a un año, le obsequio capacitación extra." Ganas permanencia; nadie bajó el precio.</li>
+        <li><strong>Solo al final:</strong> un descuento acotado y justificado ("por ser de los primeros en Cancún"). Nunca gratis — siempre a cambio de volumen, plazo, referidos o caso de éxito.</li>
+      </ol>
+      <div class="note-strip warn"><span class="ns-i">${icon('x')}</span><div><strong>Nota interna:</strong> el LMS aún NO está en el plan SCRUM — NO lo prometas como entregable inmediato. Mientras tanto, la palanca es capacitación presencial/acompañamiento extra (que sí tenemos).</div></div>
+    `},
+    { id:'25', n:'25', t:'El seguimiento y la postventa', html:`
+      <ul>
+        <li><strong>El seguimiento cierra lo que la visita no.</strong> Agenda el siguiente paso antes de irte (doble alternativa: "¿le hablo el martes o el miércoles?").</li>
+        <li><strong>El cliente feliz es tu mejor vendedor.</strong> El acompañamiento de implementación genera referidos — y en una cabeza de playa pequeña, el boca a boca es oro.</li>
+        <li><strong>Pide el testimonio y el referido</strong> cuando vea su primer resultado ("ya no se me vence mercancía"). Ese es el momento de oro.</li>
+      </ul>
+    `},
+    { id:'26', n:'26', t:'Neuromarketing aplicado', html:`
+      <p>Úsalas con ética — son cómo decide el cerebro, no trucos:</p>
+      <ul>
+        <li><strong>Cialdini (6 principios):</strong> Reciprocidad (el diagnóstico gratis), Compromiso/consistencia (micro-síes), Prueba social ("otras distribuidoras de la zona ya…"), Autoridad (tú, el asesor del giro), Agrado (rapport), Escasez ("estamos tomando los primeros clientes de Cancún").</li>
+        <li><strong>Kahneman:</strong> el dueño decide con el cerebro rápido. Háblale a la aversión a la pérdida ("lo que se le está yendo hoy") más que a la ganancia futura.</li>
+        <li><strong>Cashvertising:</strong> la gente compra seguridad, control, no quedar mal, ganar más sin esfuerzo. Zentor da los cuatro — nómbralos.</li>
+        <li><strong>Ley de Hick:</strong> menos opciones = decisión más fácil. En la demo, muestra poco y lo que le duele.</li>
+      </ul>
+    `},
+  ]
+};
+
+/* ----- PARTE VI — ARSENAL ----- */
+DATA.objeciones = [
+  { o:'Está caro.', real:'No veo el valor.', ssf:true,
+    a:'"¿Caro comparado con qué — con lo que le cuesta la mercancía que se le vence, el dinero en la calle que no cobra, y las horas del contador? Hagamos el número." (→ calculadora de ROI)' },
+  { o:'Ya tengo Aspel / un sistema.', real:'Me da flojera cambiar.', ssf:false,
+    a:'"Perfecto, ya sabe lo que es tener control. Zentor es eso en la nube, en su celular y hecho para su giro — y lo acompañamos a migrar sin perder nada." (→ piloto en paralelo)' },
+  { o:'No sé de tecnología / estoy grande para eso.', real:'Miedo.', ssf:false,
+    a:'"Por eso entramos con un diagnóstico y lo acompañamos a arrancarlo. Si usa WhatsApp, usa Zentor. Mire qué fácil." (→ demo en su celular)' },
+  { o:'Lo voy a pensar.', real:'Falta una razón para hoy.', ssf:false,
+    a:'"Claro. ¿Qué es lo único que le falta resolver para decidir?" (aísla la objeción real)' },
+  { o:'Tengo que consultarlo con mi contador.', real:'El contador es el veto.', ssf:false,
+    a:'"Me encanta, hablemos los tres — al contador le va a gustar: le llegan las pólizas ya capturadas, deja de teclear sus papeles." (convierte el veto en aliado)' },
+  { o:'¿Y si se cae el internet?', real:'Miedo a la nube.', ssf:false,
+    a:'"El vendedor sigue tomando pedidos sin internet, y se suben solos al volver la señal. Y sus datos están respaldados — no en una PC que se puede robar o descomponer."' },
+];
+
+DATA.glosario = [
+  { t:'CFDI 4.0', c:'Su factura electrónica del SAT.' },
+  { t:'Timbrar', c:'Que el SAT la selle/valide.' },
+  { t:'REP (complemento de pago)', c:'El comprobante cuando le pagan una factura a crédito.' },
+  { t:'Kardex', c:'El historial de todo lo que entra y sale de su inventario.' },
+  { t:'Costeo promedio', c:'Cuánto le cuesta de verdad cada producto.' },
+  { t:'CxC / CxP', c:'Quién le debe / a quién le debe.' },
+  { t:'Multi-tenant / RLS', c:'Su negocio totalmente aparte y seguro del de los demás.' },
+  { t:'Offline-first', c:'Funciona aunque se vaya el internet.' },
+  { t:'3-way match', c:'Que la orden, lo que recibió y lo que le facturan coincidan.' },
+  { t:'DIOT / pólizas / código agrupador', c:'Lo que su contador necesita, ya capturado.' },
+  { t:'Centro de costo / economato', c:'Cuánto gasta cada área de su negocio.' },
+  { t:'Copiloto contable / agente de IA', c:'Un asistente que hace el trabajo aburrido (capturar, cuadrar el banco) y le pregunta lo poco que no entiende; usted aprueba. (futuro — cap. 14)' },
+  { t:'Conciliación bancaria', c:'Cuadrar lo que dice su banco con lo que usted vendió y pagó.' },
+];
+DATA.noDecir = ['AaaS','MCP','ledger','machine learning','LLM','SaaS','agentes de IA'];
+
+DATA.pitches = {
+  '30s':{ ctx:'En la puerta · 30 segundos', txt:'Soy de Zentor. Ayudamos a negocios como el suyo a controlar inventario, ventas y lo que le deben en un solo sistema en la nube, con su factura 4.0 ya incluida — sin Excel y sin pagarle horas extra al contador. <em>¿Le robo 10 minutos para mostrarle cómo se vería con sus propios productos?</em>' },
+  '2min':{ ctx:'Sentados · 2 minutos', txt:'El dolor: Excel roto, facturas a mano, no saber quién le debe. La solución: un sistema donde <em>la compra sube el inventario y lo que usted debe; la venta lo baja y registra lo que le deben; y la factura sale timbrada sola</em>. La diferencia: hecho para su giro, en su celular, con quien lo acompaña a arrancarlo.' },
+  '10min':{ ctx:'La demo · 10 minutos', txt:'Catálogo con SUS productos → tomar un pedido en el celular → ver cómo <em>baja inventario y aparece la cuenta por cobrar</em> → timbrar la factura → mostrar el tablero "quién me debe". <em>Tiempo total: menos de 5 minutos. Menos es más.</em>' },
+};
+
+DATA.guion = [
+  { n:'1', t:'Hielo', seg:30, d:'Elogio sincero + su vocabulario.' },
+  { n:'2', t:'Permiso', seg:15, d:'"¿Le robo 10 minutos? Si no le sirve, me voy y no le quito más tiempo."' },
+  { n:'3', t:'Descubrimiento', seg:210, d:'Las 4 preguntas (cap. 16); escucha, toma nota.' },
+  { n:'4', t:'Reencuadre del dolor', seg:60, d:'"Entonces lo que le cuesta hoy es…" (nombra su dolor).' },
+  { n:'5', t:'Demo personalizada', seg:270, d:'Su ficha de industria, antes/después, que lo toque.' },
+  { n:'6', t:'Cierre', seg:60, d:'Doble alternativa para el siguiente paso.' },
+  { n:'7', t:'Agenda el seguimiento', seg:0, d:'Antes de irte. "¿Le hablo el martes o el miércoles?"' },
+];
+
+DATA.checklist = [
+  '¿Nombró él su dolor en voz alta?',
+  '¿Vio su propio catálogo/realidad en la demo?',
+  '¿Manejé la objeción real (no la de adorno)?',
+  '¿Pedí la venta (cierre por doble alternativa)?',
+  '¿Agendé el siguiente paso con fecha?',
+  '¿Identifiqué al contador/administrador (posible veto) y le di su argumento?',
+];
+
+DATA.comparativo = [
+  ['Dónde corre','PC (escritorio)','Nube + celular'],
+  ['Vendedor en ruta','—','App offline + escaneo'],
+  ['Hecho para tu giro','Genérico','Vertical por industria'],
+  ['Portal para tus clientes','—','Portal B2B (autopedido)'],
+  ['Pasos para facturar','Muchos','3, no 10'],
+  ['Acompañamiento','Tú solo','Consultoría que te arranca'],
+  ['Fiscal CFDI 4.0','✅','✅ nativo'],
+  ['Crece contigo (IA, datos)','—','Roadmap claro'],
+];
+
+DATA.roiModel = {
+  buckets:[
+    { id:'merma', label:'Merma / caducidad / robo', hint:'% del inventario que se pierde al mes', kind:'pct', of:'inv', min:0, max:20, step:0.5, def:5 },
+    { id:'cartera', label:'Dinero en la calle (incobrable)', hint:'% de la cartera vencida que no cobra', kind:'pct', of:'cartera', min:0, max:30, step:1, def:8 },
+    { id:'horas', label:'Horas de captura del contador', hint:'horas/mes × costo/hora que se ahorran', kind:'horas', min:0, max:60, step:1, def:12, costoHora:180 },
+    { id:'desabasto', label:'Venta perdida por desabasto', hint:'ventas/mes que se caen por "no sé si tengo"', kind:'money', min:0, max:50000, step:1000, def:6000 },
+  ],
+  inputs:[
+    { id:'inv', label:'Valor de su inventario', def:250000, pre:'$' },
+    { id:'cartera', label:'Cartera por cobrar', def:120000, pre:'$' },
+    { id:'costoZentor', label:'Costo mensual de Zentor', def:2500, pre:'$' },
+  ]
+};
+
+/* ----- índice maestro de partes (para Biblia) ----- */
+DATA.partes = [DATA.parteI, DATA.parteII, DATA.parteV];
+DATA.partesIndex = [
+  { id:'I',  n:'I',  t:'Por qué creerás en Zentor', sub:'Tesis · dolor · timing · foso · visión', caps:DATA.parteI.caps.length, ref:DATA.parteI },
+  { id:'II', n:'II', t:'Qué estás vendiendo', sub:'Zentor módulo por módulo', caps:DATA.parteII.caps.length, ref:DATA.parteII },
+  { id:'III',n:'III',t:'Habla el idioma de tu prospecto', sub:'10 fichas por giro', caps:DATA.fichas.length, isFichas:true },
+  { id:'IV', n:'IV', t:'Conoce y desplaza la competencia', sub:'Método + 7 battlecards', caps:DATA.battlecards.length, isBattle:true },
+  { id:'V',  n:'V',  t:'El arte de la venta', sub:'Alex Dey + neuromarketing', caps:DATA.parteV.caps.length, ref:DATA.parteV },
+  { id:'VI', n:'VI', t:'Tu arsenal', sub:'Objeciones · ROI · glosario · guion · checklist', caps:6, isArsenal:true },
+];
+
+/* ===========================================================================
+   CAPA DE RENDER — router ligero + vistas (sin frameworks)
+   =========================================================================== */
+const $main   = document.getElementById('main');
+const $tabbar = document.getElementById('tabbar');
+const $topctx = document.getElementById('topctx');
+
+const TABS = [
+  { id:'inicio', label:'Inicio', icon:'home' },
+  { id:'biblia', label:'Biblia', icon:'book' },
+  { id:'campo',  label:'Campo',  icon:'target' },
+  { id:'buscar', label:'Buscar', icon:'search' },
+];
+
+const TOOLS = [
+  { id:'fichas',      icon:'translate', t:'Fichas por giro',        s:'Habla el idioma de los 10 giros' },
+  { id:'battlecards', icon:'swords',    t:'Battlecards',            s:'Conoce y desplaza a 7 competidores' },
+  { id:'objeciones',  icon:'shield',    t:'Manejo de objeciones',   s:'6 objeciones · Sentir–Sentí–Encontré' },
+  { id:'roi',         icon:'calc',      t:'Calculadora de ROI',     s:'El número que cierra la venta' },
+  { id:'pitches',     icon:'mega',      t:'Pitches',                s:'30 s · 2 min · 10 min' },
+  { id:'guion',       icon:'route',     t:'Guion de visita',        s:'7 pasos cronometrados + timer' },
+  { id:'metodo',      icon:'compass',   t:'Método “ya tengo X”',    s:'Desplaza la inercia en 6 pasos' },
+  { id:'glosario',    icon:'scroll',    t:'Glosario',               s:'Habla claro, sin tecnicismos' },
+  { id:'comparativo', icon:'layers',    t:'Zentor vs Aspel',        s:'Comparativo lado a lado' },
+  { id:'checklist',   icon:'checklist', t:'Checklist de cierre',    s:'Antes de salir de la visita' },
+];
+
+/* capítulos "estudiables" (narrativa + módulos + técnicas) */
+const STUDY_CAPS = [];
+[DATA.parteI, DATA.parteII, DATA.parteV].forEach(p => p.caps.forEach(c =>
+  STUDY_CAPS.push({ id:c.id, n:c.n, t:c.t, partId:p.id, estado:c.estado||null })
+));
+const PART_BY_ID = { I:DATA.parteI, II:DATA.parteII, V:DATA.parteV };
+
+/* router */
+const Nav = { screen:null }; // null=raíz del tab; {kind:'parte',id} | {kind:'cap',partId,capId} | {kind:'tool',id}
+function scrollTop(){ try{ $main.scrollTo({ top:0, behavior:'auto' }); }catch(e){ $main.scrollTop=0; } }
+function setTab(t){ State.tab=t; Nav.screen=null; render(); scrollTop(); }
+function go(screen){ Nav.screen=screen; render(); scrollTop(); }
+
+/* helpers de formato */
+const fmt = n => '$' + Math.round(n).toLocaleString('es-MX');
+function dhead(eyebrow, title){
+  return `<div class="dhead">
+    <button class="backbtn" data-act="back" aria-label="Atrás">${icon('back')}</button>
+    <div class="dh-t"><span class="eyebrow">${esc(eyebrow)}</span><b>${esc(title)}</b></div>
+  </div>`;
+}
+function stateTag(estado, label){
+  if(estado==='built') return `<span class="tag built"><span class="dot"></span>${label||'Construido'}</span>`;
+  if(estado==='road')  return `<span class="tag road"><span class="dot"></span>${label||'En el camino'}</span>`;
+  return '';
+}
+function chevRow(){ return `<span class="ra">${icon('chev','chev')}</span>`; }
+
+/* ---------- TABBAR ---------- */
+function renderTabbar(){
+  $tabbar.innerHTML = TABS.map(t =>
+    `<button class="tab ${State.tab===t.id && !Nav.screen ? 'on':''}" data-act="tab" data-tab="${t.id}">
+       ${icon(t.icon)}<span>${t.label}</span>
+     </button>`).join('');
+}
+
+/* ---------- INICIO ---------- */
+function viewInicio(){
+  const total = STUDY_CAPS.length;
+  const done  = STUDY_CAPS.filter(c => State.studied[c.id]).length;
+  const pct   = total ? Math.round(done/total*100) : 0;
+  const r=30, C=2*Math.PI*r, off=C*(1-pct/100);
+  const nextCap = STUDY_CAPS.find(c => !State.studied[c.id]);
+
+  const quick = [
+    { id:'pitches',    icon:'mega',  t:'Pitch en la puerta', s:'30 s para entrar', accent:true },
+    { id:'roi',        icon:'calc',  t:'Calculadora ROI',    s:'El número que cierra' },
+    { id:'fichas',     icon:'translate', t:'Fichas por giro', s:'Su idioma' },
+    { id:'objeciones', icon:'shield', t:'Objeciones',        s:'Respuesta lista' },
+  ];
+
+  return `
+  <div class="pad">
+    <div class="creed">
+      <svg class="seal" viewBox="0 0 120 120" fill="none" stroke="var(--gold)" stroke-width="1.4" opacity=".9">
+        <circle cx="60" cy="60" r="54"/><circle cx="60" cy="60" r="44" opacity=".5"/>
+        <path d="M60 30 L60 90 M40 42 Q60 32 80 42 M40 78 Q60 88 80 78 M40 42 L40 78 M80 42 L80 78" stroke-width="1.8"/>
+      </svg>
+      <span class="eyebrow">Regla de oro · ZaharDev</span>
+      <h1 class="disp">${DATA.creed.rule}</h1>
+      <div class="gold-rule"></div>
+      <p class="lead" style="margin:0">${DATA.creed.body}</p>
+    </div>
+
+    <div class="card pad progress-card" style="margin-top:16px">
+      <div class="ring">
+        <svg width="74" height="74"><circle cx="37" cy="37" r="${r}" stroke="var(--line)" stroke-width="6" fill="none"/>
+          <circle cx="37" cy="37" r="${r}" stroke="var(--gold)" stroke-width="6" fill="none"
+            stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg>
+        <span class="pct">${pct}%</span>
+      </div>
+      <div class="pc-meta">
+        <b>Tu estudio de la Biblia</b>
+        <small>${done} de ${total} capítulos dominados</small>
+      </div>
+    </div>
+
+    ${nextCap ? `
+    <button class="row card-btn" style="margin-top:12px" data-act="cap" data-part="${nextCap.partId}" data-cap="${nextCap.id}">
+      <span class="rl">${icon('book')}</span>
+      <span class="rc"><b>Sigue donde te quedaste</b><small>Cap. ${nextCap.n} · ${esc(nextCap.t)}</small></span>
+      ${chevRow()}
+    </button>` : `
+    <div class="note-strip" style="margin-top:12px"><span class="ns-i">${icon('check')}</span>
+      <div>Dominaste los 24 capítulos. Ahora el campo es tuyo.</div></div>`}
+
+    <div class="sechead"><span class="eyebrow">Herramientas rápidas</span>
+      <button class="link" data-act="tab" data-tab="campo">Ver todas →</button></div>
+    <div class="qgrid">
+      ${quick.map(q => `
+        <button class="qtile ${q.accent?'accent':''}" data-act="goto-tool" data-id="${q.id}">
+          <span class="ico">${icon(q.icon)}</span>
+          <b>${q.t}</b><small>${q.s}</small>
+        </button>`).join('')}
+    </div>
+
+    <div class="sechead"><span class="eyebrow">La tesis</span></div>
+    <div class="card pad scripture">
+      <p style="margin:0">${DATA.tesis}</p>
+    </div>
+    <div class="stat-3" style="margin-top:12px">
+      <div class="st"><b>${DATA.meta.pipeline}</b><small>prospectos verificados QRoo</small></div>
+      <div class="st"><b>${DATA.meta.modulos}</b><small>módulos del producto</small></div>
+      <div class="st"><b>${DATA.meta.battlecards}</b><small>battlecards de competencia</small></div>
+    </div>
+
+    <div class="note-strip warn" style="margin-top:16px"><span class="ns-i">${icon('spark')}</span>
+      <div><b>${DATA.meta.version}</b> · ${DATA.meta.sprint}</div></div>
+  </div>`;
+}
+
+/* ---------- BIBLIA (índice de 6 partes) ---------- */
+function viewBiblia(){
+  return `
+  <div class="pad">
+    <span class="eyebrow">La Biblia del Vendedor</span>
+    <h1 class="disp" style="margin-bottom:4px">Las 6 partes</h1>
+    <p class="lead" style="margin-top:6px">De por qué creer, a cómo cerrar. Estudia en orden o salta a lo que necesitas hoy.</p>
+    <div class="rowlist" style="margin-top:18px">
+      ${DATA.partesIndex.map(p => {
+        let act = `data-act="parte" data-id="${p.id}"`;
+        if(p.isFichas)  act = `data-act="goto-tool" data-id="fichas"`;
+        if(p.isBattle)  act = `data-act="goto-tool" data-id="battlecards"`;
+        if(p.isArsenal) act = `data-act="tab" data-tab="campo"`;
+        let badge='';
+        if(p.ref){
+          const d=p.ref.caps.filter(c=>State.studied[c.id]).length;
+          badge = `<small>${d}/${p.ref.caps.length} estudiados · ${esc(p.sub)}</small>`;
+        } else badge = `<small>${esc(p.sub)}</small>`;
+        return `<button class="row card-btn" ${act}>
+          <span class="partmark">${p.n}</span>
+          <span class="rc"><b>${esc(p.t)}</b>${badge}</span>
+          ${chevRow()}
+        </button>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+/* parte → lista de capítulos */
+function partRender(partId){
+  const p = PART_BY_ID[partId];
+  const idx = DATA.partesIndex.find(x=>x.id===partId);
+  const html = `
+    ${dhead('Parte '+p.n, p.titulo)}
+    <div class="pad" style="padding-top:6px">
+      <p class="lead">${p.intro}</p>
+      <div class="rowlist" style="margin-top:16px">
+        ${p.caps.map(c => `
+          <button class="row card-btn" data-act="cap" data-part="${partId}" data-cap="${c.id}">
+            <span class="rl" style="font-family:var(--f-mono);color:var(--gold);font-weight:700">${c.n}</span>
+            <span class="rc"><b>${esc(c.t)}</b>
+              <small>${State.studied[c.id] ? '✓ estudiado' : 'Tocar para leer'}${c.estado?' · ':''}${c.estado==='built'?'construido':c.estado==='road'?'roadmap':''}</small>
+            </span>
+            ${c.estado?stateTag(c.estado, c.estado==='built'?'✓':'🔜'):''}
+            ${chevRow()}
+          </button>`).join('')}
+      </div>
+    </div>`;
+  return { html, ctx:'Parte '+p.n };
+}
+
+/* capítulo → lectura */
+function capRender(partId, capId){
+  const p = PART_BY_ID[partId];
+  const i = p.caps.findIndex(c=>c.id===capId);
+  const c = p.caps[i];
+  const prev = p.caps[i-1], next = p.caps[i+1];
+  const studied = !!State.studied[c.id];
+  const html = `
+    ${dhead('Parte '+p.n+' · Cap. '+c.n, c.t)}
+    <div class="pad ch-read" style="padding-top:8px">
+      ${c.estado ? `<div class="ch-status">${stateTag(c.estado, c.estado==='built'?'Construido — véndelo como hecho':'En el camino — véndelo como visión')}${c.tag?`<span class="tag gold">${esc(c.tag)}</span>`:''}</div>`:''}
+      <div class="scripture">${c.html}</div>
+
+      <button class="studybtn ${studied?'done':''}" data-act="toggle-study" data-cap="${c.id}">
+        ${icon('check')}<span>${studied?'Capítulo dominado':'Marcar como estudiado'}</span>
+      </button>
+
+      <div class="chnav">
+        <button ${prev?`data-act="cap" data-part="${partId}" data-cap="${prev.id}"`:'disabled'}>
+          <small>Anterior</small><b>${prev?esc('Cap. '+prev.n):'—'}</b></button>
+        <button class="next" ${next?`data-act="cap" data-part="${partId}" data-cap="${next.id}"`:'disabled'}>
+          <small>Siguiente</small><b>${next?esc('Cap. '+next.n):'—'}</b></button>
+      </div>
+    </div>`;
+  return { html, ctx:'Cap. '+c.n };
+}
+
+/* ---------- CAMPO (rejilla de herramientas) ---------- */
+function viewCampo(){
+  return `
+  <div class="pad">
+    <span class="eyebrow">Tu arsenal</span>
+    <h1 class="disp" style="margin-bottom:4px">Campo</h1>
+    <p class="lead" style="margin-top:6px">Lo que abres frente al prospecto. Todo offline, en tu celular.</p>
+    <div class="rowlist" style="margin-top:18px">
+      ${TOOLS.map(t => `
+        <button class="row card-btn" data-act="tool" data-id="${t.id}">
+          <span class="rl" style="color:var(--gold)">${icon(t.icon)}</span>
+          <span class="rc"><b>${t.t}</b><small>${t.s}</small></span>
+          ${chevRow()}
+        </button>`).join('')}
+    </div>
+  </div>`;
+}
+
+/* ---------- HERRAMIENTA: dispatch ---------- */
+function toolRender(id){
+  switch(id){
+    case 'fichas':      return fichasTool();
+    case 'battlecards': return battlecardsTool();
+    case 'objeciones':  return objecionesTool();
+    case 'roi':         return roiTool();
+    case 'pitches':     return pitchesTool();
+    case 'guion':       return guionTool();
+    case 'metodo':      return metodoTool();
+    case 'glosario':    return glosarioTool();
+    case 'comparativo': return comparativoTool();
+    case 'checklist':   return checklistTool();
+    default:            return { html:dhead('Campo','—'), ctx:'campo' };
+  }
+}
+
+/* FICHAS por giro */
+function fichasTool(){
+  if(!State.ficha) State.ficha = DATA.fichas[0].id;
+  const f = DATA.fichas.find(x=>x.id===State.ficha) || DATA.fichas[0];
+  const chips = DATA.fichas.map(x =>
+    `<button class="chip ${x.id===f.id?'on':''}" data-act="ficha" data-id="${x.id}">
+       <span class="e">${x.e}</span>${esc(x.nombre.split(' / ')[0])}${x.star?'<span class="star">★</span>':''}
+     </button>`).join('');
+  const html = `
+    ${dhead('Parte III','Habla su idioma')}
+    <div class="chiprow">${chips}</div>
+    <div class="pad" style="padding-top:12px">
+      <div class="ficha-hero">
+        <div class="big-e">${f.e}</div>
+        <h2 class="sec" style="margin-top:8px">${esc(f.nombre)}</h2>
+        <span class="eyebrow muted">${esc(f.sub)}</span>
+        ${f.star?`<div style="margin-top:10px">${stateTag('built','Donde Zentor brilla hoy')}</div>`:''}
+      </div>
+
+      <div class="block"><div class="block-h">Su dolor<span class="ln"></span></div>
+        <div class="card pad scripture"><p style="margin:0">${f.dolor}</p></div></div>
+
+      <div class="block"><div class="block-h">Su vocabulario — úsalo<span class="ln"></span></div>
+        <div class="vocab">${f.vocab.map(v=>`<span>${esc(v)}</span>`).join('')}</div></div>
+
+      <div class="block"><div class="block-h">El “ajá”<span class="ln"></span></div>
+        <div class="aja"><div class="lbl">${icon('spark')}Lo que le hace clic</div><p>${f.aja}</p></div></div>
+
+      <div class="block"><div class="block-h">Objeción típica → respuesta<span class="ln"></span></div>
+        <div class="obj-pair"><div class="o">${f.obj.q}</div>
+          <div class="arrow">▸ RESPONDE</div><div class="a">${f.obj.a}</div></div></div>
+
+      <div class="block"><div class="block-h">Pitch para este giro<span class="ln"></span></div>
+        <div class="pitch1"><p>${f.pitch}</p></div></div>
+
+      <div class="block"><div class="block-h">Por qué se paga<span class="ln"></span></div>
+        <div class="roi-line"><span class="ri">${icon('check')}</span><p>${f.roi}</p></div></div>
+    </div>`;
+  return { html, ctx:f.nombre.split(' / ')[0] };
+}
+
+/* BATTLECARDS */
+function battlecardsTool(){
+  if(State.battlecard){
+    const b = DATA.battlecards.find(x=>x.id===State.battlecard);
+    const html = `
+      ${dhead('Battlecard', b.nombre)}
+      <div class="pad" style="padding-top:8px">
+        <div class="bc-hero" style="background:linear-gradient(160deg,var(--surface-2),var(--ink-2))">
+          <div class="stripe" style="background:var(${b.color})"></div>
+          <span class="eyebrow muted">${esc(b.tagline)}</span>
+          <h2 class="sec" style="margin-top:4px">${esc(b.nombre)}</h2>
+          <p class="lead" style="margin:10px 0 0">${b.queEs}</p>
+        </div>
+        ${b.warn?`<div class="note-strip warn" style="margin-top:12px"><span class="ns-i">${icon('shield')}</span><div>Compite poco de frente: usa esto solo si el prospecto lo menciona.</div></div>`:''}
+
+        <div class="block"><div class="block-h">Quién lo usa<span class="ln"></span></div>
+          <div class="card pad scripture"><p style="margin:0">${b.quienUsa}</p></div></div>
+
+        <div class="block"><div class="block-h" style="color:var(--steel)">Sus fuerzas (reconócelas)<span class="ln"></span></div>
+          ${b.fuerzas.map(s=>`<div class="str-li"><span class="c">${icon('check')}</span><span>${esc(s)}</span></div>`).join('')}</div>
+
+        <div class="block"><div class="block-h" style="color:var(--danger)">Sus huecos (tu cuña)<span class="ln"></span></div>
+          ${b.huecos.map(h=>`<div class="gap-li"><span class="x">${icon('x')}</span><span>${esc(h)}</span></div>`).join('')}</div>
+
+        <div class="block"><div class="wedge"><div class="lbl">Cómo lo tomas</div>
+          <p style="margin:0;color:var(--bone);font-size:14.5px;line-height:1.55">${b.comoTomar}</p></div></div>
+
+        <div class="block"><div class="frase-box"><div class="lbl">La frase que desarma</div><p>${b.frase}</p></div></div>
+      </div>`;
+    return { html, ctx:b.nombre };
+  }
+  const list = DATA.battlecards.map(b =>
+    `<button class="bc-row" data-act="bc" data-id="${b.id}">
+       <span class="bc-chip" style="background:var(${b.color})"></span>
+       <span class="bc-c"><b>${esc(b.nombre)}</b><small>${esc(b.tagline)}</small></span>
+       ${chevRow()}
+     </button>`).join('');
+  const html = `
+    ${dhead('Parte IV','Battlecards')}
+    <div class="pad" style="padding-top:8px">
+      <p class="lead">Conoce a quien ya usa tu prospecto. Reconoce sus fuerzas, clava la cuña en sus huecos.</p>
+      <div class="bc-list" style="margin-top:16px">${list}</div>
+      <button class="note-strip warn" style="margin-top:16px;width:100%;text-align:left" data-act="tool" data-id="metodo">
+        <span class="ns-i">${icon('compass')}</span>
+        <div><b>“Ya tengo un sistema”</b> no es un no. → Abre el Método de desplazamiento.</div></button>
+    </div>`;
+  return { html, ctx:'Battlecards' };
+}
+
+/* OBJECIONES */
+function objecionesTool(){
+  const items = DATA.objeciones.map((o,i) => `
+    <div class="obj-acc" data-i="${i}">
+      <button class="obj-q" data-act="obj" data-i="${i}">
+        <span class="qi">${icon('quote')}</span>
+        <span class="qt"><b>“${esc(o.o)}”</b><small>De fondo: ${esc(o.real)}</small></span>
+        <span class="caret">${icon('caret')}</span>
+      </button>
+      <div class="obj-a"><div class="obj-a-in">
+        ${o.ssf?`<div class="ssf"><span>Sentir</span><span>Sentí</span><span>Encontré</span></div>`:''}
+        ${o.a}
+      </div></div>
+    </div>`).join('');
+  const html = `
+    ${dhead('Parte VI','Objeciones')}
+    <div class="pad" style="padding-top:8px">
+      <div class="note-strip"><span class="ns-i">${icon('eye')}</span>
+        <div>Toda objeción esconde la real. Responde a la de fondo, no a la de la superficie.</div></div>
+      <div style="margin-top:14px">${items}</div>
+    </div>`;
+  return { html, ctx:'Objeciones' };
+}
+
+/* ROI — calculadora viva */
+const ROIv = Store.get('z.roi', null) || (()=>{ const o={};
+  DATA.roiModel.buckets.forEach(b=>o['b_'+b.id]=b.def);
+  DATA.roiModel.inputs.forEach(i=>o['i_'+i.id]=i.def); return o; })();
+function saveRoi(){ Store.set('z.roi', ROIv); Cloud.queuePush(); }
+function roiCompute(){
+  const inv=+ROIv.i_inv||0, carteraStock=+ROIv.i_cartera||0, costo=+ROIv.i_costoZentor||0;
+  const merma   = inv * (+ROIv.b_merma||0)/100;
+  const cartera = carteraStock * (+ROIv.b_cartera||0)/100 * 0.03; // 3%/mes: costo del dinero atorado
+  const horas   = (+ROIv.b_horas||0) * 180;
+  const desab   = (+ROIv.b_desabasto||0);
+  const total   = merma + cartera + horas + desab;
+  const ratio   = costo>0 ? total/costo : 0;
+  return { merma, cartera, horas, desab, total, costo, ratio };
+}
+function roiOutHTML(){
+  const r = roiCompute();
+  const gana = r.total > r.costo;
+  return `
+    <div class="roi-result">
+      <div class="rlabel">Se le fuga al mes (estimado)</div>
+      <div class="rbig" id="roi-big">${fmt(r.total)}</div>
+      <div class="rsub">vs. ${fmt(r.costo)} que cuesta Zentor al mes</div>
+      <div class="roi-break">
+        <div class="rb"><span>Merma / caducidad / robo</span><b>${fmt(r.merma)}</b></div>
+        <div class="rb"><span>Dinero atorado en la calle (3%/mes)</span><b>${fmt(r.cartera)}</b></div>
+        <div class="rb"><span>Horas de captura ($180/h)</span><b>${fmt(r.horas)}</b></div>
+        <div class="rb"><span>Venta perdida por desabasto</span><b>${fmt(r.desab)}</b></div>
+      </div>
+    </div>
+    <div class="roi-verdict">
+      ${gana
+        ? `Zentor cuesta <b>${fmt(r.costo)}</b> y el problema le cuesta <b>${fmt(r.total)}</b> al mes. <b>Se paga ${r.ratio.toFixed(1)}× solo.</b> Cambiar hoy conviene aunque pierda lo ya pagado.`
+        : `Con estos números el ahorro aún no cubre la mensualidad. Sé honesto: aquí se vende por <b>control, visibilidad y cumplimiento</b>, no por ahorro directo — o ajusta los supuestos con el dueño.`}
+    </div>`;
+}
+function roiTool(){
+  const sliders = DATA.roiModel.buckets.map(b => {
+    const key='b_'+b.id, v=ROIv[key];
+    const disp = b.kind==='pct'?`${v}%` : b.kind==='horas'?`${v} h` : fmt(v);
+    return `<div class="calc-field">
+      <label>${esc(b.label)}<span class="v" id="v_${key}">${disp}</span></label>
+      <input type="range" data-roi="${key}" data-kind="${b.kind}" min="${b.min}" max="${b.max}" step="${b.step}" value="${v}">
+      <div class="hint">${esc(b.hint)}</div>
+    </div>`;
+  }).join('');
+  const nums = DATA.roiModel.inputs.map(i => {
+    const key='i_'+i.id;
+    return `<div class="calc-field"><label>${esc(i.label)}</label>
+      <div class="calc-num"><span class="cn-pre">${i.pre||''}</span>
+        <input type="number" data-roi="${key}" value="${ROIv[key]}" inputmode="numeric"></div></div>`;
+  }).join('');
+  const html = `
+    ${dhead('Parte VI','Calculadora de ROI')}
+    <div class="pad" style="padding-top:8px">
+      <div class="note-strip"><span class="ns-i">${icon('calc')}</span>
+        <div>El costo de NO cambiar es el número que cierra. Llénalo con SUS cifras, frente a él.</div></div>
+      <div style="margin-top:18px">${nums}${sliders}</div>
+      <div id="roi-out">${roiOutHTML()}</div>
+      <p class="hint" style="margin-top:12px">Supuestos transparentes: dinero en la calle valuado a 3%/mes de costo de oportunidad; hora de captura a $180. Ajústalos con el dueño — vendemos con verdad.</p>
+    </div>`;
+  return { html, ctx:'ROI' };
+}
+
+/* PITCHES */
+function pitchesTool(){
+  const segs=['30s','2min','10min'], labels={'30s':'30 seg','2min':'2 min','10min':'10 min'};
+  if(!State.pitchSeg) State.pitchSeg='30s';
+  const p = DATA.pitches[State.pitchSeg];
+  const html = `
+    ${dhead('Parte I','Pitches')}
+    <div class="pad" style="padding-top:8px">
+      <div class="pitch-seg">
+        ${segs.map(s=>`<button class="${s===State.pitchSeg?'on':''}" data-act="pitch-seg" data-seg="${s}">${labels[s]}</button>`).join('')}
+      </div>
+      <div class="pitch-card">
+        <div class="ctx">${p.ctx}</div>
+        <div class="ptxt">${p.txt}</div>
+      </div>
+      <div class="note-strip warn" style="margin-top:14px"><span class="ns-i">${icon('flame')}</span>
+        <div>Cierra siempre el de 30 s pidiendo <b>10 minutos con sus propios productos</b>. La demo se gana en la puerta.</div></div>
+    </div>`;
+  return { html, ctx:'Pitches' };
+}
+
+/* GUION + timer + descubrimiento */
+function guionTool(){
+  const total = DATA.guion.reduce((a,g)=>a+g.seg,0);
+  const mmss = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+  const steps = DATA.guion.map((g,i)=>`
+    <div class="gstep">
+      ${i<DATA.guion.length-1?'<div class="gline"></div>':''}
+      <div class="gn">${g.n}</div>
+      <div class="gc"><div class="gtop"><b>${esc(g.t)}</b><span class="gtime">${g.seg>=60?(g.seg/60).toFixed(g.seg%60?1:0)+' min':g.seg+' s'}</span></div>
+        <p>${g.d}</p></div>
+    </div>`).join('');
+  const html = `
+    ${dhead('Parte V','Guion de visita')}
+    <div class="pad" style="padding-top:8px">
+      <div class="card pad" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div><div class="eyebrow muted" style="font-size:9.5px">Cronómetro de visita</div>
+          <div id="vtimer" style="font-family:var(--f-mono);font-weight:700;font-size:30px;color:var(--gold);line-height:1.1">00:00</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="backbtn" id="tStart" style="width:auto;padding:0 16px;color:var(--gold)" data-act="timer-start">▶</button>
+          <button class="backbtn" id="tReset" data-act="timer-reset">↺</button>
+        </div>
+      </div>
+      <div class="note-strip" style="margin:14px 0"><span class="ns-i">${icon('clock')}</span>
+        <div>Objetivo total: <b>${mmss(total)}</b>. Menos es más — sal con el siguiente paso agendado.</div></div>
+      ${steps}
+
+      <div class="divider"></div>
+      <span class="eyebrow">Las 4 preguntas de descubrimiento</span>
+      <div class="rowlist" style="margin-top:12px">
+        ${DATA.descubrimiento.map((d,i)=>`
+          <div class="row" style="cursor:default">
+            <span class="rl" style="color:var(--gold);font-family:var(--f-mono);font-weight:700">${i+1}</span>
+            <span class="rc"><b style="font-size:14.5px">${esc(d.q)}</b><small>revela: ${esc(d.tag)}</small></span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  return { html, ctx:'Guion' };
+}
+
+/* MÉTODO de desplazamiento */
+function metodoTool(){
+  const html = `
+    ${dhead('Parte IV','“Ya tengo X”')}
+    <div class="pad" style="padding-top:8px">
+      <div class="note-strip warn"><span class="ns-i">${icon('compass')}</span><div>${DATA.metodo.intro}</div></div>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px">
+        ${DATA.metodo.pasos.map((p,i)=>`
+          <div class="metodo-step"><div class="n">${i+1}</div>
+            <div class="mc"><b>${esc(p.t)}</b><p>${p.d}</p></div></div>`).join('')}
+      </div>
+      <div class="block"><div class="frase-box"><div class="lbl">El orden que funciona</div>
+        <p style="font-style:normal">${DATA.metodo.orden}</p></div></div>
+    </div>`;
+  return { html, ctx:'Método' };
+}
+
+/* GLOSARIO + no-decir */
+function glosarioTool(){
+  const html = `
+    ${dhead('Parte VI','Glosario')}
+    <div class="pad" style="padding-top:8px">
+      <p class="lead">Traduce a su idioma. Si tú lo dices claro, él confía.</p>
+      <div style="margin-top:14px">
+        ${DATA.glosario.map(g=>`<div class="gl-item"><div class="gt">${esc(g.t)}</div><div class="ga">${esc(g.c)}</div></div>`).join('')}
+      </div>
+      <div class="nodecir" style="margin-top:18px">
+        <div class="lbl">${icon('x')}Nunca digas frente al dueño</div>
+        <div class="words">${DATA.noDecir.map(w=>`<span>${esc(w)}</span>`).join('')}</div>
+      </div>
+    </div>`;
+  return { html, ctx:'Glosario' };
+}
+
+/* COMPARATIVO Zentor vs Aspel */
+function comparativoTool(){
+  const rows = DATA.comparativo.map(r=>`<tr><td>${esc(r[0])}</td><td style="color:var(--dim)">${esc(r[1])}</td><td style="color:var(--jade);font-weight:600">${esc(r[2])}</td></tr>`).join('');
+  const html = `
+    ${dhead('Parte VI','Zentor vs Aspel')}
+    <div class="pad" style="padding-top:8px">
+      <div class="card pad">
+        <table class="dtable"><thead><tr><th></th><th>Aspel SAE</th><th style="color:var(--gold)">Zentor</th></tr></thead>
+          <tbody>${rows}</tbody></table>
+      </div>
+      <div class="note-strip warn" style="margin-top:14px"><span class="ns-i">${icon('spark')}</span>
+        <div>“Aspel fue lo mejor de su época. Su época era de escritorio. Zentor es Aspel hecho hoy.”</div></div>
+    </div>`;
+  return { html, ctx:'vs Aspel' };
+}
+
+/* CHECKLIST de cierre */
+function checklistTool(){
+  const items = DATA.checklist.map((t,i)=>`
+    <button class="check-item ${State.checks[i]?'done':''}" data-act="check" data-i="${i}">
+      <span class="cbx">${icon('check')}</span><span class="ctxt">${esc(t)}</span>
+    </button>`).join('');
+  const done = DATA.checklist.filter((_,i)=>State.checks[i]).length;
+  const html = `
+    ${dhead('Parte VI','Checklist de cierre')}
+    <div class="pad" style="padding-top:8px">
+      <div class="note-strip"><span class="ns-i">${icon('checklist')}</span>
+        <div>Antes de salir de la visita — ${done}/${DATA.checklist.length} listos.</div></div>
+      <div class="rowlist" style="margin-top:14px">${items}</div>
+    </div>`;
+  return { html, ctx:'Checklist' };
+}
+
+/* ---------- BUSCAR ---------- */
+const strip = h => String(h).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+const SEARCH_INDEX = (()=>{
+  const ix=[];
+  [DATA.parteI,DATA.parteII,DATA.parteV].forEach(p=>p.caps.forEach(c=>
+    ix.push({ cat:'Capítulos', title:'Cap. '+c.n+' · '+c.t, sub:'Parte '+p.n, hay:(c.t+' '+strip(c.html)).toLowerCase(), k:'cap', a:p.id, b:c.id })));
+  DATA.fichas.forEach(f=>
+    ix.push({ cat:'Fichas por giro', title:f.nombre, sub:f.sub, hay:(f.nombre+' '+f.sub+' '+f.vocab.join(' ')+' '+f.dolor+' '+f.pitch).toLowerCase(), k:'ficha', a:f.id }));
+  DATA.battlecards.forEach(b=>
+    ix.push({ cat:'Battlecards', title:b.nombre, sub:b.tagline, hay:(b.nombre+' '+b.tagline+' '+b.queEs+' '+b.huecos.join(' ')+' '+b.frase).toLowerCase(), k:'bc', a:b.id }));
+  DATA.objeciones.forEach((o,i)=>
+    ix.push({ cat:'Objeciones', title:'“'+o.o+'”', sub:'De fondo: '+o.real, hay:(o.o+' '+o.real+' '+o.a).toLowerCase(), k:'tool', a:'objeciones' }));
+  DATA.glosario.forEach(g=>
+    ix.push({ cat:'Glosario', title:g.t, sub:g.c, hay:(g.t+' '+g.c).toLowerCase(), k:'tool', a:'glosario' }));
+  return ix;
+})();
+function hl(text,q){
+  if(!q) return esc(text);
+  const t=esc(text), needle=q.toLowerCase(), low=t.toLowerCase();
+  let out='', i=0, p;
+  while((p=low.indexOf(needle,i))!==-1){ out+=t.slice(i,p)+'<span class="hl">'+t.slice(p,p+needle.length)+'</span>'; i=p+needle.length; }
+  return out+t.slice(i);
+}
+function searchResultsHTML(q){
+  q=(q||'').trim();
+  if(!q) return `<div class="empty">${icon('search')}<b>Busca en toda la Biblia</b>Capítulos, fichas, competidores, objeciones y glosario.</div>`;
+  const ql=q.toLowerCase();
+  const hits=SEARCH_INDEX.filter(x=>x.hay.includes(ql));
+  if(!hits.length) return `<div class="empty">${icon('search')}<b>Sin resultados para “${esc(q)}”</b>Prueba otra palabra (giro, competidor, dolor…).</div>`;
+  const cats={}; hits.forEach(h=>{ (cats[h.cat]=cats[h.cat]||[]).push(h); });
+  return Object.keys(cats).map(cat=>`
+    <div class="search-cat">${esc(cat)} · ${cats[cat].length}<span class="ln"></span></div>
+    <div class="rowlist">
+      ${cats[cat].map(h=>`
+        <button class="row card-btn" data-act="go" data-k="${h.k}" data-a="${h.a||''}" data-b="${h.b||''}">
+          <span class="rc"><b>${hl(h.title,q)}</b><small>${hl(h.sub,q)}</small></span>${chevRow()}
+        </button>`).join('')}
+    </div>`).join('');
+}
+function viewBuscar(){
+  return `
+    <div class="searchbar">
+      <div class="searchbox" id="sbox">
+        ${icon('search')}
+        <input id="q" data-search placeholder="Buscar giro, competidor, objeción…" autocomplete="off" value="${esc(State._q||'')}">
+        <button class="clr" data-act="clear-q" ${State._q?'':'style="visibility:hidden"'}>${icon('x')}</button>
+      </div>
+    </div>
+    <div class="pad-x"><div id="results">${searchResultsHTML(State._q||'')}</div></div>`;
+}
+
+/* ===========================================================================
+   RENDER dispatcher
+   =========================================================================== */
+function render(){
+  renderTabbar();
+  let html='', ctx='del vendedor';
+  const s=Nav.screen;
+  if(s){
+    let r;
+    if(s.kind==='parte') r=partRender(s.id);
+    else if(s.kind==='cap') r=capRender(s.partId,s.capId);
+    else if(s.kind==='tool') r=toolRender(s.id);
+    else if(s.kind==='account') r=accountRender();
+    html=r.html; ctx=r.ctx;
+  } else {
+    if(State.tab==='inicio'){ html=viewInicio(); ctx='del vendedor'; }
+    else if(State.tab==='biblia'){ html=viewBiblia(); ctx='las 6 partes'; }
+    else if(State.tab==='campo'){ html=viewCampo(); ctx='tu arsenal'; }
+    else if(State.tab==='buscar'){ html=viewBuscar(); ctx='buscar'; }
+  }
+  $main.innerHTML = `<div class="view">${html}</div>`;
+  $topctx.textContent = ctx;
+  postRender();
+}
+function postRender(){
+  if(State.tab==='buscar' && !Nav.screen){
+    const q=document.getElementById('q');
+    if(q){ q.focus(); const v=q.value; q.value=''; q.value=v; }
+  }
+}
+
+/* ===========================================================================
+   EVENTOS (delegación)
+   =========================================================================== */
+function back(){
+  const s=Nav.screen; if(!s) return;
+  if(s.kind==='tool' && s.id==='battlecards' && State.battlecard){ State.battlecard=null; render(); scrollTop(); return; }
+  if(s.kind==='cap'){ Nav.screen={kind:'parte',id:s.partId}; }
+  else if(s.kind==='parte'){ Nav.screen=null; State.tab='biblia'; }
+  else if(s.kind==='tool'){ Nav.screen=null; State.tab='campo'; }
+  else if(s.kind==='account'){ Nav.screen=null; State.tab='inicio'; }
+  render(); scrollTop();
+}
+function doGo(k,a,b){
+  if(k==='cap'){ State.tab='biblia'; Nav.screen={kind:'cap',partId:a,capId:b}; }
+  else if(k==='ficha'){ State.ficha=a; State.tab='campo'; Nav.screen={kind:'tool',id:'fichas'}; }
+  else if(k==='bc'){ State.battlecard=a; State.tab='campo'; Nav.screen={kind:'tool',id:'battlecards'}; }
+  else if(k==='tool'){ State.tab='campo'; Nav.screen={kind:'tool',id:a}; }
+  render(); scrollTop();
+}
+
+document.addEventListener('click', (e)=>{
+  const t=e.target.closest('[data-act]'); if(!t) return;
+  const act=t.dataset.act;
+  switch(act){
+    case 'tab': setTab(t.dataset.tab); break;
+    case 'goto-search': State.tab='buscar'; Nav.screen=null; render(); scrollTop(); break;
+    case 'goto-account': Nav.screen={kind:'account'}; render(); scrollTop(); break;
+    case 'login-open': showLogin(); break;
+    case 'auth-send': doSendLink(); break;
+    case 'acct-save-name': {
+      const inp=document.getElementById('acct-name');
+      if(inp){ const btn=t; btn.disabled=true; const orig=btn.textContent; btn.textContent='Guardando…';
+        Cloud.saveName((inp.value||'').trim()).then(()=>{ btn.textContent='Guardado ✓'; setTimeout(()=>{ btn.disabled=false; btn.textContent=orig; },1400); })
+          .catch(()=>{ btn.disabled=false; btn.textContent=orig; }); }
+      break;
+    }
+    case 'acct-signout': Cloud.signOut().then(()=>{ Cloud.team=null; showLogin(); render(); }); break;
+    case 'goto-tool': State.tab='campo'; Nav.screen={kind:'tool',id:t.dataset.id}; render(); scrollTop(); break;
+    case 'parte': go({kind:'parte',id:t.dataset.id}); break;
+    case 'cap': go({kind:'cap',partId:t.dataset.part,capId:t.dataset.cap}); break;
+    case 'tool': go({kind:'tool',id:t.dataset.id}); break;
+    case 'ficha': State.ficha=t.dataset.id; render(); break;
+    case 'bc': State.battlecard=t.dataset.id; render(); scrollTop(); break;
+    case 'back': back(); break;
+    case 'go': doGo(t.dataset.k,t.dataset.a,t.dataset.b); break;
+    case 'pitch-seg': State.pitchSeg=t.dataset.seg; render(); break;
+    case 'toggle-study': {
+      const id=t.dataset.cap;
+      if(State.studied[id]) delete State.studied[id]; else State.studied[id]=true;
+      State.saveStudied(); render();
+      break;
+    }
+    case 'check': {
+      const i=t.dataset.i;
+      if(State.checks[i]) delete State.checks[i]; else State.checks[i]=true;
+      State.saveChecks(); render();
+      break;
+    }
+    case 'obj': {
+      const acc=t.closest('.obj-acc');
+      const open=acc.classList.toggle('open');
+      const body=acc.querySelector('.obj-a');
+      body.style.maxHeight = open ? body.firstElementChild.scrollHeight+24+'px' : '0px';
+      break;
+    }
+    case 'clear-q': {
+      State._q=''; const r=document.getElementById('results'); if(r) r.innerHTML=searchResultsHTML('');
+      const q=document.getElementById('q'); if(q){ q.value=''; q.focus(); }
+      const clr=t; clr.style.visibility='hidden';
+      break;
+    }
+    case 'timer-start': toggleTimer(); break;
+    case 'timer-reset': resetTimer(); break;
+  }
+});
+
+document.addEventListener('input', (e)=>{
+  const el=e.target;
+  if(el.dataset && el.dataset.roi){
+    const key=el.dataset.roi; ROIv[key]=+el.value;
+    if(el.dataset.kind){
+      const span=document.getElementById('v_'+key);
+      if(span) span.textContent = el.dataset.kind==='pct'?`${el.value}%` : el.dataset.kind==='horas'?`${el.value} h` : fmt(+el.value);
+    }
+    const out=document.getElementById('roi-out'); if(out) out.innerHTML=roiOutHTML();
+    saveRoi();
+    return;
+  }
+  if(el.id==='q'){
+    State._q=el.value;
+    const r=document.getElementById('results'); if(r) r.innerHTML=searchResultsHTML(el.value);
+    const clr=document.querySelector('[data-act="clear-q"]'); if(clr) clr.style.visibility=el.value?'visible':'hidden';
+  }
+});
+
+document.addEventListener('keydown', (e)=>{
+  if(e.key==='Enter' && e.target && e.target.id==='auth-email'){ e.preventDefault(); doSendLink(); }
+});
+
+/* cronómetro de visita */
+let _tInt=null, _tSec=0;
+function paintTimer(){ const el=document.getElementById('vtimer'); if(el) el.textContent=`${String(Math.floor(_tSec/60)).padStart(2,'0')}:${String(_tSec%60).padStart(2,'0')}`; }
+function toggleTimer(){
+  const btn=document.getElementById('tStart');
+  if(_tInt){ clearInterval(_tInt); _tInt=null; if(btn) btn.textContent='▶'; }
+  else { _tInt=setInterval(()=>{ _tSec++; paintTimer(); },1000); if(btn) btn.textContent='❚❚'; }
+}
+function resetTimer(){ if(_tInt){ clearInterval(_tInt); _tInt=null; } _tSec=0; paintTimer(); const b=document.getElementById('tStart'); if(b) b.textContent='▶'; }
+
+/* ===========================================================================
+   CUENTA Y NUBE (Supabase) — acceso por magic link + sincronización de avances
+   Degradación elegante: sin configurar, la app sigue funcionando 100% offline.
+   =========================================================================== */
+const Cloud = (() => {
+  const cfg = (typeof ZENTOR_CONFIG !== 'undefined') ? ZENTOR_CONFIG : {};
+  const hasLib = !!(window.supabase && window.supabase.createClient);
+  const looksReal = v => v && !/TU[-_]/.test(v);
+  const configured = hasLib && looksReal(cfg.SUPABASE_URL) && looksReal(cfg.SUPABASE_ANON_KEY);
+  let sb = null;
+  if (configured) { try { sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY); } catch(e){ sb = null; } }
+
+  return {
+    enabled: !!sb,
+    user: null,
+    profile: null,
+    team: null,
+    _timer: null,
+    _onChange: null,
+
+    isAdmin(){ return !!(this.profile && this.profile.role === 'admin'); },
+
+    async init(onChange){
+      if(!sb) return false;
+      this._onChange = onChange;
+      sb.auth.onAuthStateChange((event, session) => {
+        this.user = session ? session.user : null;
+        if(this._onChange) setTimeout(() => this._onChange(event, session), 0);
+      });
+      const { data } = await sb.auth.getSession();
+      this.user = data.session ? data.session.user : null;
+      return !!this.user;
+    },
+
+    async sendMagicLink(email){
+      if(!sb) throw new Error('La nube no está configurada');
+      const redirect = window.location.href.split('#')[0];
+      const { error } = await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: redirect } });
+      if(error) throw error;
+    },
+
+    async signOut(){
+      if(!sb) return;
+      await sb.auth.signOut();
+      this.user = null; this.profile = null; this.team = null;
+    },
+
+    async loadProfile(){
+      if(!sb || !this.user) return null;
+      let { data } = await sb.from('profiles').select('*').eq('id', this.user.id).maybeSingle();
+      if(!data){
+        const ins = await sb.from('profiles').insert({ id:this.user.id, email:this.user.email }).select().maybeSingle();
+        data = ins.data;
+      }
+      this.profile = data;
+      return data;
+    },
+
+    async saveName(name){
+      if(!sb || !this.user) return;
+      await sb.from('profiles').update({ full_name:name }).eq('id', this.user.id);
+      if(this.profile) this.profile.full_name = name;
+    },
+
+    /* baja la nube y la fusiona con lo local (lo aprendido nunca se pierde) */
+    async syncDown(){
+      if(!sb || !this.user) return;
+      const { data } = await sb.from('progress').select('*').eq('user_id', this.user.id).maybeSingle();
+      const cStudied = (data && data.studied) || {};
+      const cChecks  = (data && data.checks)  || {};
+      const cRoi     = (data && data.roi)     || null;
+      State.studied = Object.assign({}, cStudied, State.studied);
+      State.checks  = Object.assign({}, cChecks,  State.checks);
+      Store.set('z.studied', State.studied);
+      Store.set('z.checks',  State.checks);
+      if(cRoi){ Object.keys(cRoi).forEach(k => { if(ROIv[k] == null) ROIv[k] = cRoi[k]; }); Store.set('z.roi', ROIv); }
+      await this.pushNow();
+    },
+
+    queuePush(){
+      if(!sb || !this.user) return;
+      clearTimeout(this._timer);
+      this._timer = setTimeout(() => this.pushNow(), 800);
+    },
+
+    async pushNow(){
+      if(!sb || !this.user) return;
+      try{
+        await sb.from('progress').upsert({
+          user_id: this.user.id,
+          studied: State.studied,
+          checks:  State.checks,
+          roi:     ROIv,
+          updated_at: new Date().toISOString()
+        }, { onConflict:'user_id' });
+      }catch(e){ /* sin red: se reintenta en el próximo guardado */ }
+    },
+
+    async loadTeam(){
+      if(!sb || !this.isAdmin()) return [];
+      const total = STUDY_CAPS.length;
+      const { data:profiles } = await sb.from('profiles').select('id,email,full_name,role');
+      const { data:progs }    = await sb.from('progress').select('user_id,studied,updated_at');
+      const byId = {}; (progs||[]).forEach(p => byId[p.user_id] = p);
+      this.team = (profiles||[]).map(p => {
+        const pr = byId[p.id];
+        const done = pr && pr.studied ? STUDY_CAPS.filter(c => pr.studied[c.id]).length : 0;
+        return {
+          name:  p.full_name || (p.email||'').split('@')[0] || 'Vendedor',
+          email: p.email, role: p.role,
+          done, total, pct: total ? Math.round(done/total*100) : 0,
+          updated: pr && pr.updated_at ? pr.updated_at : null
+        };
+      }).sort((a,b) => b.pct - a.pct);
+      return this.team;
+    }
+  };
+})();
+
+/* ---------- overlay de acceso ---------- */
+function showLogin(){ const el=document.getElementById('auth'); if(el) el.style.display='flex'; }
+function hideLogin(){ const el=document.getElementById('auth'); if(el) el.style.display='none'; }
+async function doSendLink(){
+  const inp=document.getElementById('auth-email');
+  const msg=document.getElementById('auth-msg');
+  const btn=document.getElementById('auth-send');
+  const email=(inp.value||'').trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent='Escribe un correo válido.'; msg.className='auth-msg err'; return; }
+  btn.disabled=true; msg.textContent='Enviando…'; msg.className='auth-msg';
+  try{
+    await Cloud.sendMagicLink(email);
+    msg.textContent='Listo ✓ Revisa tu correo y abre el enlace para entrar.';
+    msg.className='auth-msg ok';
+  }catch(e){
+    msg.textContent='No se pudo enviar: '+(e.message||e);
+    msg.className='auth-msg err';
+  }
+  btn.disabled=false;
+}
+
+/* ---------- vista de cuenta ---------- */
+function fechaRel(iso){
+  if(!iso) return 'sin actividad';
+  const d=new Date(iso), now=new Date(), days=Math.floor((now-d)/86400000);
+  if(days<=0) return 'hoy';
+  if(days===1) return 'ayer';
+  if(days<30) return `hace ${days} d`;
+  return d.toLocaleDateString('es-MX');
+}
+function accountRender(){
+  const ctx='mi cuenta';
+  const total = STUDY_CAPS.length;
+  const done  = STUDY_CAPS.filter(c => State.studied[c.id]).length;
+  const pct   = total ? Math.round(done/total*100) : 0;
+
+  if(!Cloud.enabled){
+    return { ctx, html: dhead('Cuenta','Modo local') + `<div class="pad-x">
+      <div class="card"><div class="note">
+        Tus avances se guardan <b>solo en este dispositivo</b>. Para tener cuenta, sincronizar
+        entre teléfonos y que el administrador vea el progreso del equipo, configura Supabase
+        en <b>ZENTOR_CONFIG</b> (ver README).
+      </div></div>
+      <div class="card"><div class="prog-big"><b>${done}/${total}</b><span>capítulos estudiados · ${pct}%</span></div>
+        <div class="bar"><i style="width:${pct}%"></i></div></div>
+    </div>` };
+  }
+
+  if(!Cloud.user){
+    return { ctx, html: dhead('Cuenta','Inicia sesión') + `<div class="pad-x">
+      <div class="card"><div class="note">Entra con tu correo para guardar y sincronizar tus avances.</div></div>
+      <button class="btn" data-act="login-open">Iniciar sesión</button>
+    </div>` };
+  }
+
+  const p = Cloud.profile || {};
+  let html = dhead('Cuenta','Mi cuenta') + `<div class="pad-x">`;
+  html += `<div class="card acct-card">
+    <div class="acct-row kv"><span class="k">Correo</span><span class="v">${esc(p.email || Cloud.user.email || '')}</span></div>
+    ${Cloud.isAdmin() ? '<div class="acct-row kv"><span class="k">Rol</span><span class="v">Administrador</span></div>' : ''}
+    <div class="acct-row"><span class="k">Nombre</span>
+      <input id="acct-name" class="acct-input" value="${esc(p.full_name||'')}" placeholder="Tu nombre"></div>
+    <button class="btn" data-act="acct-save-name">Guardar nombre</button>
+  </div>`;
+  html += `<div class="card"><div class="prog-big"><b>${done}/${total}</b><span>capítulos estudiados · ${pct}%</span></div>
+    <div class="bar"><i style="width:${pct}%"></i></div></div>`;
+
+  if(Cloud.isAdmin()){
+    html += `<div class="sec-title">Equipo</div>`;
+    if(Cloud.team){
+      html += `<div class="card">` + (Cloud.team.length ? Cloud.team.map(m => `
+        <div class="team-row">
+          <div class="team-top">
+            <div class="tm-id"><b>${esc(m.name)}</b><small>${esc(m.email||'')}${m.role==='admin'?' · admin':''} · ${fechaRel(m.updated)}</small></div>
+            <div class="tm-pct"><b>${m.pct}%</b><small>${m.done}/${m.total}</small></div>
+          </div>
+          <div class="bar sm"><i style="width:${m.pct}%"></i></div>
+        </div>`).join('') : '<div class="muted">Aún no hay vendedores registrados.</div>') + `</div>`;
+    } else {
+      html += `<div class="card"><div class="muted">Cargando equipo…</div></div>`;
+      setTimeout(() => { Cloud.loadTeam().then(() => { if(Nav.screen && Nav.screen.kind==='account') render(); }); }, 0);
+    }
+  }
+
+  html += `<button class="btn ghost" data-act="acct-signout">Cerrar sesión</button></div>`;
+  return { ctx, html };
+}
+
+/* ===========================================================================
+   INIT
+   =========================================================================== */
+async function init(){
+  if(Cloud.enabled){
+    const onAuth = async (event) => {
+      if(event === 'INITIAL_SESSION') return;          // ya lo maneja el arranque
+      if(event === 'SIGNED_OUT'){ showLogin(); render(); return; }
+      if(Cloud.user){
+        try{ await Cloud.loadProfile(); await Cloud.syncDown(); }catch(e){}
+        hideLogin(); render();
+      }
+    };
+    try{
+      const logged = await Cloud.init(onAuth);
+      if(logged){ try{ await Cloud.loadProfile(); await Cloud.syncDown(); }catch(e){} hideLogin(); }
+      else { showLogin(); }
+    }catch(e){ /* si falla la nube, seguimos en local */ }
+  }
+  render();
+  const splash=document.getElementById('splash');
+  const hide=()=>{ if(splash) splash.classList.add('gone'); };
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) setTimeout(hide,400);
+  else setTimeout(hide,1700);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+
+</script>
+</body>
+</html>
