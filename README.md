@@ -67,6 +67,7 @@ nombre del vendedor en tu panel de CEO:
 - Alexis  → `https://zentor-sales.vercel.app/?nombre=Alexis`
 - Javier  → `https://zentor-sales.vercel.app/?nombre=Javier`
 - Gabriela→ `https://zentor-sales.vercel.app/?nombre=Gabriela`
+- Abner   → `https://zentor-sales.vercel.app/?nombre=Abner`
 
 Cada quien entra con su propio correo (magic link); el nombre solo personaliza la
 experiencia y el panel.
